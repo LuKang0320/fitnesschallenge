@@ -15,13 +15,16 @@ import {
   TableHead,
   TableRow,
   useMediaQuery,
-  Tooltip
+  Tooltip,
+  Button
 } from '@mui/material';
+import AnimateButton from 'components/@extended/AnimateButton';
 import { alpha, useTheme } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 
 // third-party
 import { useExpanded, useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
-import {  EditTwoTone,EyeTwoTone,InfoCircleTwoTone  } from '@ant-design/icons';
+import {  MailOutlined ,DeleteTwoTone } from '@ant-design/icons';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -29,7 +32,6 @@ import ScrollX from 'components/ScrollX';
 import IconButton from 'components/@extended/IconButton';
 import { CSVExport, HeaderSort, IndeterminateCheckbox, TablePagination, TableRowSelection } from 'components/third-party/ReactTable';
 import AlertColumnDelete from 'sections/apps/kanban/Board/AlertColumnDelete';
-
 import { dispatch , useSelector} from 'store';
 import { openSnackbar } from 'store/reducers/snackbar';
 import { alertPopupToggle } from 'store/reducers/invoice';
@@ -39,15 +41,15 @@ import useHCSS from 'hooks/useHCSS';
 
 // ==============================|| REACT TABLE ||============================== //
 
-function ReactTable({ columns, data }) {
+function ReactTable({ columns, data,handleAddNew }) {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), []);
   const filterTypes = useMemo(() => renderFilterTypes, []);
   const initialState = useMemo(
     () => ({
-      filters: [{ id: 'staffingstatus', value: '' }],
-      hiddenColumns: ['id'],
+      filters: [{ id: 'rolename', value: '' }],
+      hiddenColumns: ['userid', 'roleid'],
       pageIndex: 0,
       pageSize: 10
     }),
@@ -87,8 +89,8 @@ function ReactTable({ columns, data }) {
 
   // ================ Tab ================
 
-  const groups = ['All', ...new Set(data.map((item) => item.staffingstatus))];
-  const countGroup = data.map((item) => item.staffingstatus);
+  const groups = ['All', ...new Set(data.map((item) => item.rolename))];
+  const countGroup = data.map((item) => item.rolename);
   const counts = countGroup.reduce(
     (acc, value) => ({
       ...acc,
@@ -100,7 +102,7 @@ function ReactTable({ columns, data }) {
   const [activeTab, setActiveTab] = useState(groups[0]);
 
   useEffect(() => {
-    setFilter('staffingstatus', activeTab === 'All' ? '' : activeTab);
+    setFilter('rolename', activeTab === 'All' ? '' : activeTab);
     // eslint-disable-next-line
   }, [activeTab]);
 
@@ -118,13 +120,18 @@ function ReactTable({ columns, data }) {
                   label={
                     status === 'All'
                       ? data.length
-                      : status === 'Open'
-                      ? counts.Open
-                      : status === 'Full'
-                      ? counts.Full
-                      : counts.Open
+                      : status === 'Project Staff Member'
+                      ? counts['Project Staff Member']
+                      : status === 'Branch Manager'
+                      ? counts['Branch Manager']
+                      : status === 'Incatech Accounting'
+                      ? counts['Incatech Accounting']
+                      : status === 'Program Manager'
+                      ? counts['Program Manager']
+                      :0
+                      
                   }
-                  color={status === 'All' ? 'primary' : status === 'Open' ? 'success' : status === 'Full' ? 'warning' : 'error'}
+                  color={status === 'All' ? 'primary' : status === 'Project Staff Member' ? 'success' : status === 'Branch Manager' ? 'warning' : 'error'}
                   variant="light"
                   size="small"
                 />
@@ -154,14 +161,21 @@ function ReactTable({ columns, data }) {
               ))}
             </Stack>
           ))} */}
-          <CSVExport data={data} filename={'workorders.csv'} />
+          
+              <AnimateButton>
+                <Button disableElevation startIcon={<AddIcon />} onClick={handleAddNew}  variant="outlined"   sx={{ my: 0, ml: 3, mr:3}}>
+                  Add New User
+                </Button>
+              </AnimateButton>
+           
+          <CSVExport data={data} filename={'allusers.csv'} />
         </Stack>
       </Stack>
       <Box ref={componentRef}>
         <Table {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup, i) => (
-              <TableRow key={i} {...headerGroup.getHeaderGroupProps()} sx={{ '& > th:first-of-type': { width: '58px' } }}>
+              <TableRow key={i} {...headerGroup.getHeaderGroupProps()} sx={{ '& > th:first-of-type': { width: '220px' } }}>
                 {headerGroup.headers.map((column, x) => (
                   <TableCell key={x} {...column.getHeaderProps([{ className: column.className }])}>
                     <HeaderSort column={column} sort />
@@ -206,75 +220,35 @@ function ReactTable({ columns, data }) {
 
 ReactTable.propTypes = {
   columns: PropTypes.array,
-  data: PropTypes.array
-};
-
-// ==============================|| INVOICE - LIST ||============================== //
-
-
-// Status
-const StatusCell = ({ value }) => {
-  switch (value) {
-
-    case 'Open':
-      return <Chip color="success" label="Open" size="small" variant="light" />;
-    case 'Full':
-      return <Chip color="warning" label="Full" size="small" variant="light" />;
-  }
-};
-
-StatusCell.propTypes = {
-  value: PropTypes.string
+  data: PropTypes.array,
+  handleAddNew: PropTypes.func
 };
 
 // Action Cell
-const ActionCell = (row, theme,setWorkorderName,setWorkorderId,handlerSelect,handleNextFinancial,handleNextUtilization) => {
+const ActionCell = (row, theme,setUserName,setUserId,handlerSelect) => {
+  //console.log(row);
   return (
-    <Stack direction="row" alignItems="left" justifyContent="left" spacing={0}>
-      
-      <Tooltip title="Monthly Content Review">
+    <Stack direction="row" alignItems="left" justifyContent="left" spacing={0} >    
+      <Tooltip  title="Send Email to the Seleted User" style={{ opacity: row.original.emailsent == '1'? '0.4': '1' }}>
         <IconButton
           color="primary"
           onClick={(e) => {
             e.stopPropagation();
-            //console.log(row);
-            //navigation(`/apps/invoice/edit/${row.values.id}`);
             handlerSelect(row);
           }}
         >
-          <EditTwoTone twoToneColor={theme.palette.primary.main} />
+          <MailOutlined twoToneColor={theme.palette.primary.main} />
         </IconButton>
       </Tooltip>
-      <Tooltip title="View Financial Summary">
-        <IconButton
-          color="secondary"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleNextFinancial(row);
-          }}
-        >
-          <EyeTwoTone twoToneColor={theme.palette.secondary.main} />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="View Utilization Summary">
-        <IconButton
-          color="secondary"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleNextUtilization(row);
-          }}
-        >
-          <InfoCircleTwoTone twoToneColor={theme.palette.success.main} />
-        </IconButton>
-      </Tooltip>
+  
 
-      {/* <Tooltip title="Delete">
+      <Tooltip title="Delete">
         <IconButton
           color="error"
           onClick={(e) => {
             e.stopPropagation();
-            setWorkorderName(row.values.workordername);
-            setWorkorderId(row.values.workordernumber);
+            setUserName(row.values.username);
+            setUserId(row.values.userid);
             dispatch(
               alertPopupToggle({
                 alertToggle: true
@@ -284,7 +258,7 @@ const ActionCell = (row, theme,setWorkorderName,setWorkorderId,handlerSelect,han
         >
           <DeleteTwoTone twoToneColor={theme.palette.error.main} />
         </IconButton>
-      </Tooltip> */}
+      </Tooltip>
     </Stack>
   );
 };
@@ -293,11 +267,9 @@ ActionCell.propTypes = {
   row: PropTypes.array,
   //navigation: PropTypes.func,
   theme: PropTypes.object,
-  setWorkorderName: PropTypes.func,
-  setWorkorderId: PropTypes.func,
-  handlerSelect: PropTypes.func,
-  handleNextFinancial: PropTypes.func,
-  handleNextUtilization: PropTypes.func
+  setUserName: PropTypes.func,
+  setUserId: PropTypes.func,
+  handlerSelect: PropTypes.func
 };
 
 // Section Cell and Header
@@ -314,18 +286,15 @@ SelectionHeader.propTypes = {
   getToggleAllPageRowsSelectedProps: PropTypes.func
 };
 
-const ViewWorkOrders = ({handlerSelect,handleNextFinancial,handleNextUtilization}) => {
-  const { GetAllWorkOrders } = useHCSS();
+const ManageUsers = ({handlerSelect,handleAddNew}) => {
+  const { GetAllUsers,DeleteUser } = useHCSS();
   const {  alertPopup } = useSelector((state) => state.invoice);
-
   const [list, setList] = React.useState([]);
-  const [workorderId, setWorkorderId] = useState('');
-  const [workorderName, setWorkorderName] = useState('');
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
   useEffect(() => {
-    const init = async () => {
-     
-      let listsres = await GetAllWorkOrders();
-      //console.log(listsres);
+    const init = async () => {   
+      let listsres = await GetAllUsers(1);
       setList(listsres.data);
       
     };
@@ -333,25 +302,56 @@ const ViewWorkOrders = ({handlerSelect,handleNextFinancial,handleNextUtilization
     init();
   }, []);
 
-  //const navigation = useNavigate();
-
   const handleClose = (status) => {
     if (status) {
-      //dispatch(getInvoiceDelete(invoiceId));
-      //console.log(workorderId);
-      //console.log(workorderName);
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Column deleted successfully',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
-        })
-      );
+      const dodelete = async () => {
+        try {  
+          var res =  await DeleteUser(userId);
+          if(res.data.success == true){
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Selected user has been deleted successfully',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: false
+              })
+            );
+            let listsres = await GetAllUsers(1);
+            setList(listsres.data);
+          }
+          else{
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Can NOT delete the selected user.',
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: false
+              })
+            );
+          }
+          } 
+          catch (err) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Can NOT delete the selected user.',
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: false
+              })
+            );
+          }       
+      };
+      dodelete();
     }
     dispatch(
       alertPopupToggle({
@@ -362,41 +362,28 @@ const ViewWorkOrders = ({handlerSelect,handleNextFinancial,handleNextUtilization
   const columns = useMemo(
     () => [
       {
-        Header: 'Work Order Id',
-        accessor: 'id',
-        className: 'cell-center',
-        disableFilters: true
+        Header: 'User Name',
+        accessor: 'username',
+        //className: 'cell-center'//,
+        //disableFilters: true
       },
       {
-        Header: 'Work Order Number',
-        accessor: 'workordernumber',
-        disableFilters: false//,
-        //Cell: CustomerCell
+        Header: 'Role',
+        accessor: 'rolename'
       },
       {
-        Header: 'Work Order Name',
-        accessor: 'workordername'
+        Header: 'User ID',
+        accessor: 'userid'
       },
       {
-        Header: 'AAQ Branch',
-        accessor: 'aaqbranch'
-      },
-      {
-        Header: 'Branch Manager',
-        accessor: 'aaqbranchmanager'
-      },
-      {
-        Header: 'Staffing Status',
-        accessor: 'staffingstatus',
-        //disableFilters: true,
-        filter: 'includes',
-        Cell: StatusCell
+        Header: 'Role ID',
+        accessor: 'roleid'
       },
       {
         Header: 'Actions',
         //className: 'cell-center',
         disableSortBy: true,
-        Cell: ({ row }) => ActionCell(row, theme,setWorkorderName,setWorkorderId, handlerSelect,handleNextFinancial,handleNextUtilization)
+        Cell: ({ row }) => ActionCell(row, theme,setUserName,setUserId, handlerSelect)
       }
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -410,18 +397,17 @@ const ViewWorkOrders = ({handlerSelect,handleNextFinancial,handleNextUtilization
 
       <MainCard content={false}>
         <ScrollX>
-          <ReactTable columns={columns} data={list} />
+          <ReactTable columns={columns} data={list} handleAddNew={handleAddNew} />
         </ScrollX>
       </MainCard>
-      <AlertColumnDelete title={`${workorderId} ` + `${workorderName}`} open={alertPopup} handleClose={handleClose} />
+      <AlertColumnDelete title={`${userName}`} open={alertPopup} handleClose={handleClose} />
     </>
   );
 };
 
-ViewWorkOrders.propTypes = {
+ManageUsers.propTypes = {
   handlerSelect: PropTypes.func,
-  handleNextFinancial: PropTypes.func,
-  handleNextUtilizationL: PropTypes.func
+  handleAddNew: PropTypes.func
 };
 
-export default ViewWorkOrders;
+export default ManageUsers;

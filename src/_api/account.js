@@ -41,18 +41,28 @@ services.onPost('/api/account/login').reply(async (request) => {
     }, 
     });
 
-    let userres = await userresponse.json();
-    //console.log(loginres);
-    //console.log(userres);
-    if(response.ok && userresponse.ok){
+    var fitnessresponse = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetLatestFitnessChallenge?' + new URLSearchParams({
 
+  }), {
+      method:'GET',
+      headers: {
+        'Authorization': 'Bearer '+ loginres.access_token
+    }, 
+    });
+
+    let fitres = await fitnessresponse.json();
+
+    let userres = await userresponse.json();
+    if(response.ok && userresponse.ok&&fitnessresponse.ok){
       const serviceToken = jwt.sign({ userId: userres.Id }, JWT_SECRET, { expiresIn: loginres.expires_in });
-      const accessToken =loginres.access_token
+      const accessToken =loginres.access_token;
+      const latestFitness= fitres;
       return [
         200,
         {
           serviceToken,
           accessToken,
+          latestFitness,
           user: {
             id: userres.Id,
             email: userres.Email,
@@ -65,39 +75,6 @@ services.onPost('/api/account/login').reply(async (request) => {
     else {
       return [400, { message: loginres.error_description }];
     }
-
-
-    
-    //let newUsers = users;
-
-    // if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-    //   const localUsers = window.localStorage.getItem('users');
-    //   newUsers = JSON.parse(localUsers);
-    // }
-
-    // const user = newUsers.find((_user) => _user.email === email);
-
-    // if (!user) {
-    //   return [400, { message: 'Verify Your Email & Password' }];
-    // }
-
-    // if (user.password !== password) {
-    //   return [400, { message: 'Invalid Password' }];
-    // }
-
-    // const serviceToken = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_TIME });
-
-    // return [
-    //   200,
-    //   {
-    //     serviceToken,
-    //     user: {
-    //       id: user.id,
-    //       email: user.email,
-    //       name: user.name
-    //     }
-    //   }
-    // ];
   } catch (err) {
     console.error(err);
     return [500, { message: 'Server Error' }];
@@ -110,6 +87,30 @@ services.onPost('/api/account/register').reply(async (request) => {
 
     const { id, email, password, firstName, lastName } = JSON.parse(request.data);
 
+
+    let formData = new FormData();
+    formData.append('FirstName', firstName);
+    formData.append('LastName', lastName);
+    formData.append('Email', email);
+
+    formData.append('UserGroup', 'Employee');
+    formData.append('CompanyorGroup', 'INCATECH');
+    formData.append('Username', email);
+
+    formData.append('Password', password);
+    formData.append('ConfirmPassword', password);
+    formData.append('RegisterFrom', 'HR');
+
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/account/create', {
+      method:'post',
+      body: new URLSearchParams(formData)
+    });
+    let loginres = await response.json();
+  
+    if(loginres.Message == 'The request is invalid.'){
+      return [400, { message: loginres.ModelState[""][0]
+      }];
+    }
     if (!email || !password) {
       return [400, { message: 'Enter Your Email & Password' }];
     }

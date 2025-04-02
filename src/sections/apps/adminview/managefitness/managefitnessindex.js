@@ -4,55 +4,60 @@ import PropTypes from 'prop-types';
 import { Button, Stack } from '@mui/material';
 
 // project imports
-import WorkOrdersList from './viewworkorders';
-import MonthlyContentForm from './MonthlyContentForm';
-import FinancialSummary from './FinancialSummary';
-import UtilizationSummary from './UtilizationSummary';
+import ManageFitness from './managefitness';
+import ManageUserEditForm from './manageuseredituser';
+import ManageFitnessAddNewForm from './managefitnessaddnew';
+import ManageUserEditBranchForm from './manageusereditbranchuser';
 import MainCard from 'components/MainCard';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // step options
-const steps = ['Work Orders', 'Monthly Content Review', 'Financial Summary','Utilization Summary'];
+const steps = ['All User', 'Manage User', 'Add New User', 'Manage Branch User'];
 
-const GetStepContent = ({ handlenext,handleNextUtilization, handleNextFinancial, step, activeRowData }) => {
+const GetStepContent = ({ handlenext,handleAddNew, step, activeRowData }) => {
   switch (step) {
     case 0:
-      return <WorkOrdersList handlerSelect={handlenext} handleNextUtilization={handleNextUtilization} handleNextFinancial={handleNextFinancial}/>;
+      return <ManageFitness handlerSelect={handlenext} handleAddNew={handleAddNew} />;
     case 1:
-      return <MonthlyContentForm  activeRowData={activeRowData}/>;
+      return <ManageUserEditForm  activeRowData={activeRowData}/>;
     case 2:
-      return <FinancialSummary activeRowData={activeRowData}/>;
+        return <ManageFitnessAddNewForm activeRowData={activeRowData}/>;
     case 3:
-      return <UtilizationSummary activeRowData={activeRowData}/>;
+          return <ManageUserEditBranchForm activeRowData={activeRowData}/>;
     default:
       return <></>
   }
 }
 GetStepContent.propTypes = {
   handlenext: PropTypes.func,
-  handleNextFinancial: PropTypes.func,
+  handleAddNew: PropTypes.func,
   step: PropTypes.number,
   activeRowData: PropTypes.object
 };
 // ==============================|| FORMS WIZARD - BASIC ||============================== //
 
-const ViewworkordersIndex = () => {
+const ManageFitnessIndex = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [activeRowData, setActiveRowData] = useState({});
   //console.log(activeRowData);
   const handleNext = (row) => {
-    setActiveStep(1);
+    console.log(row);
+    if(row.values.rolename === 'Branch Manager'){
+      setActiveStep(3);
+    }
+    if(row.values.rolename === 'Project Staff Member'){
+
+      setActiveStep(1);
+    }
+    
     setActiveRowData(row);
   };
 
-  const handleNextFinancial = (row) => {
+  const handleAddNew = (row) => {
     setActiveStep(2);
     setActiveRowData(row);
   };
-  const handleNextUtilization = (row) => {
-    setActiveStep(3);
-    setActiveRowData(row);
-  };
+
   const handleBack = () => {
     setActiveStep(0);
     setActiveRowData({});
@@ -69,7 +74,7 @@ const ViewworkordersIndex = () => {
       </Stepper> */}
       <>
           
-            <GetStepContent step={activeStep} handlenext={handleNext} handleNextUtilization={handleNextUtilization} handleNextFinancial={handleNextFinancial} activeRowData={activeRowData}/>
+            <GetStepContent step={activeStep} handlenext={handleNext} handleAddNew={handleAddNew} activeRowData={activeRowData}/>
             <Stack direction="row" justifyContent={activeStep !== 0 ? 'space-between' : 'flex-end'}>
               {activeStep !== 0 && (
                 <Button variant="contained" onClick={handleBack} sx={{ my: 3, ml: 1 }}>
@@ -92,4 +97,4 @@ const ViewworkordersIndex = () => {
   );
 };
 
-export default ViewworkordersIndex;
+export default ManageFitnessIndex;

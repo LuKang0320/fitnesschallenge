@@ -148,16 +148,7 @@ export const HCSSProvider = ({ children }) => {
     return resdata;
   };
 
-  const GetAllUsers = async () => {
 
-    const response = await axios.post('/api/hcss/GetAllUsers', {
-      
-    });
-    let resdata = response.data;
-
-    //console.log(resdata);
-    return resdata;
-  };
 
   const GetAllUserRoles = async () => {
 
@@ -450,7 +441,26 @@ export const HCSSProvider = ({ children }) => {
 
 
 // fitness
+const GetAllFitness = async () => {
 
+  const response = await axios.post('/api/fitness/GetAllFitness', {
+    
+  });
+  let resdata = response.data;
+
+  //console.log(resdata);
+  return resdata;
+};
+const GetAllUsers = async (fitid) => {
+
+  const response = await axios.post('/api/fitness/GetAllUsers', {
+    fitid
+  });
+  let resdata = response.data;
+
+  //console.log(resdata);
+  return resdata;
+};
 const GetAllFitnessActivities = async (userid) => {
 
   const response = await axios.post('/api/fitness/GetAllFitnessActivities', {
@@ -471,6 +481,15 @@ const GetEmployeeDailyUpdatesByUserID = async (userid, dstring) => {
   //console.log(resdata);
   return resdata;
 };
+
+
+const AddNewFitnessActivityRecord = async (fitnesschallengeid,activity,totalminutes,activityid,datestring) => {
+  const response = await axios.post('/api/fitness/AddNewFitnessActivityRecord', {fitnesschallengeid,activity,totalminutes,activityid,datestring});
+  let  res = response.data;
+  return res;
+  
+};
+
 
 
   if (state.isInitialized !== undefined && !state.isInitialized) {
@@ -499,7 +518,7 @@ const GetEmployeeDailyUpdatesByUserID = async (userid, dstring) => {
 
 
 
-  GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID}}>{children}</HCSSContext.Provider>;
+  GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID,GetAllFitness,AddNewFitnessActivityRecord}}>{children}</HCSSContext.Provider>;
 };
 
 HCSSProvider.propTypes = {

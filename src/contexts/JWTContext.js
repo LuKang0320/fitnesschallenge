@@ -54,6 +54,13 @@ const setAccessSession = (serviceToken) => {
   //console.log(window.localStorage.getItem('accessToken'))
 };
 
+const setLatestFitness = (latestFitness) => {
+  if (latestFitness) {
+    localStorage.setItem('latestFitness', JSON.stringify(latestFitness));
+  } else {
+    localStorage.removeItem('latestFitness');
+  }
+};
 // ==============================|| JWT CONTEXT & PROVIDER ||============================== //
 
 const JWTContext = createContext(null);
@@ -97,9 +104,8 @@ export const JWTProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const response = await axios.post('/api/account/login', { email, password });
-    const { serviceToken,accessToken, user } = response.data;
+    const { serviceToken,accessToken,latestFitness, user } = response.data;
 
-    
     if(user.role.includes('Project Staff Member')){
       onChangeAppDefaultPath('/dashboard/employeeview');
       //console.log(APP_DEFAULT_PATH);
@@ -108,19 +114,7 @@ export const JWTProvider = ({ children }) => {
       onChangeAppDefaultPath('/dashboard/programmanagerview/contract');
       //console.log(APP_DEFAULT_PATH);
     }
-    if(user.role.includes('Incatech Accounting')){
-      onChangeAppDefaultPath('/dashboard/financialpersonnelview');
-      //console.log(APP_DEFAULT_PATH);
-    }
-    if(user.role.includes('Division Manager')){
-      onChangeAppDefaultPath('/dashboard/divisionmanagerview/contract');
-      //console.log(APP_DEFAULT_PATH);
-    }
-    if(user.role.includes('Branch Manager')){
-      onChangeAppDefaultPath('/dashboard/branchmanagerview/contract');
-      //console.log(APP_DEFAULT_PATH);
-    }
-    
+
     let users = [user];
     localStorage.removeItem('users');
     if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
@@ -138,6 +132,7 @@ export const JWTProvider = ({ children }) => {
     window.localStorage.setItem('users', JSON.stringify(users));
     setSession(serviceToken);
     setAccessSession(accessToken);
+    setLatestFitness(latestFitness);
     dispatch({
       type: LOGIN,
       payload: {
@@ -158,27 +153,14 @@ export const JWTProvider = ({ children }) => {
       firstName,
       lastName
     });
-    let users = response.data;
-
-    if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-      const localUsers = window.localStorage.getItem('users');
-      users = [
-        ...JSON.parse(localUsers),
-        {
-          id,
-          email,
-          password,
-          name: `${firstName} ${lastName}`
-        }
-      ];
-    }
-
-    window.localStorage.setItem('users', JSON.stringify(users));
+    console.log(response);
   };
 
   const logout = () => {
     localStorage.removeItem('users');
+    localStorage.removeItem('latestFitness');
     setSession(null);
+    setLatestFitness(null);
     dispatch({ type: LOGOUT });
   };
 

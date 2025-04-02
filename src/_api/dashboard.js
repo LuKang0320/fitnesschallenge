@@ -54,8 +54,8 @@ var dashboard = {
       }
     },
     {
-      id: 'employeeview',
-      title: 'employeeview',
+      id: 'dailyactivity',
+      title: 'dailyactivity',
       icon: 'dashboardOutlined',
       url: '/dashboard/employeeview',
       breadcrumbs: false,
@@ -67,7 +67,7 @@ var dashboard = {
 if(window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null)
  { const localUsers = window.localStorage.getItem('users');
   var newUsers = JSON.parse(localUsers);
-  //console.log(newUsers);
+  
           if(newUsers[0].role.includes('Employee')){
             dashboard = {
               id: 'group-dashboard',
@@ -76,8 +76,8 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
               icon: 'dashboardOutlined',
               children: [
                 {
-                  id: 'employeeview',
-                  title: 'employeeview',
+                  id: 'dailyactivity',
+                  title: 'dailyactivity',
                   icon: 'dashboardOutlined',
                   url: '/dashboard/employeeview',
                   breadcrumbs: false,
@@ -88,7 +88,7 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
 
         }
 
-        if(newUsers[0].role.includes('HR')){
+        if(newUsers[0].role.includes('SuperAdmin')){
           dashboard = {
             id: 'group-dashboard',
             title: 'dashboard',
@@ -96,119 +96,33 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
             icon: 'dashboardOutlined',
             children: [
               {
-                id: 'programmanagement',
-                title: 'programmanagement',
-                type: 'collapse',
-                url: '/dashboard/programmanagerview/contract',
+                id: 'dailyactivity',
+                title: 'dailyactivity',
                 icon: 'dashboardOutlined',
-                children: [             
+                url: '/dashboard/employeeview',
+                breadcrumbs: false,
+                type: 'item'
+              },
+              {
+                id: 'adminview',
+                title: 'adminview',
+                type: 'collapse',
+                url: '/dashboard/adminview/adminlanding',
+                icon: 'dashboardOutlined',
+                breadcrumbs: false,
+                children: [    
                   {
-                    id: 'createworkorder',
-                    title:'createworkorder',
+                    id: 'managefitness',
+                    title:'managefitness',
                     type: 'item',
-                    url: '/dashboard/programmanagerview/createworkorder',
+                    url: '/dashboard/adminview/managefitness',
                     breadcrumbs: true
-                  }
-                  ,
-                  {
-                    id: 'viewworkorders',
-                    title:'viewworkorders',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/viewworkorders',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'recruitingstatus',
-                    title:'recruitingstatus',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/recruitingstatus',
-                    breadcrumbs: true
-                  },
-
-                  
-                  {
-                    id: 'progressreport',
-                    title:'progressreport',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/progressreport',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'woprogressreport',
-                    title:'woprogressreport',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/woprogressreport',
-                    breadcrumbs: true
-                  },
-                  // {
-                  //   id: 'vieworgchart',
-                  //   title:'vieworgchart',
-                  //   type: 'item',
-                  //   url: '/dashboard/programmanagerview/org-chart',
-                  //   breadcrumbs: true
-                  // },
-                  {
-                    id: 'vieworg',
-                    title:'vieworg',
-                    type: 'collapse',
-                    children: [
-                        {
-                          id: 'staffingstatus',
-                          title:'Staffing Status',
-                          type: 'item',
-                          url: '/dashboard/programmanagerview/orgnization/basic',
-                          breadcrumbs: true
-                        },
-                        {
-                          id: 'orgnizationview',
-                          title:'Orgnization View',
-                          type: 'item',
-                          url: '/dashboard/programmanagerview/orgnization/personal',
-                          breadcrumbs: true
-                        }
-                    ]
-                  },
-                  // {
-                  //   id: 'financials',
-                  //   title:'View Financials/Hours',
-                  //   type: 'item',
-                  //   url: '/dashboard/programmanagerview/financials',
-                  //   breadcrumbs: true
-                  // },
-                  {
-                    id: 'rosters',
-                    title:'rosters',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/rosters',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'pastmprs',
-                    title:'pastmprs',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/pastmprs',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'financialsummary',
-                    title:'financialsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/financialsummary',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'utilizationsummary',
-                    title:'utilizationsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/utilizationsummary',
-                    breadcrumbs: true
-                  }
-                  ,
+                  }  ,         
                   {
                     id: 'manageusers',
                     title:'manageusers',
                     type: 'item',
-                    url: '/dashboard/programmanagerview/manageusers',
+                    url: '/dashboard/adminview/manageusers',
                     breadcrumbs: true
                   }                  
                 ]
@@ -217,41 +131,7 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
           };
         }
 
-        if(newUsers[0].role.includes('Incatech Accounting')){
-          dashboard = {
-            id: 'group-dashboard',
-            title: 'dashboard',
-            type: 'group',
-            icon: 'dashboardOutlined',
-            children: [
-              {
-                id: 'financialpersonnel',
-                title: 'financialpersonnel',
-                type: 'collapse',
-                icon: 'dashboardOutlined',
-                url: '/dashboard/financialpersonnelview',
-                children: [   
-                  {
-                    id: 'financialsummary',
-                    title:'financialsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/financialsummary',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'utilizationsummary',
-                    title:'utilizationsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/utilizationsummary',
-                    breadcrumbs: true
-                  }
-                  ]
-              }
-            ]
-          };
-        }
-
-        if(newUsers[0].role.includes('Admin')){
+        if(newUsers[0].role.includes('HR')){
 
           dashboard = {
             id: 'group-dashboard',
@@ -296,149 +176,6 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
 
         }
 
-        if(newUsers[0].role.includes('Division Manager')){
-          dashboard = {
-            id: 'group-dashboard',
-            title: 'dashboard',
-            type: 'group',
-            icon: 'dashboardOutlined',
-            children: [
-              {
-                id: 'divisionmanagement',
-                title: 'divisionmanagement',
-                type: 'collapse',
-                url: '/dashboard/divisionmanagerview/contract',
-                icon: 'dashboardOutlined',
-                children: [             
-                  {
-                    id: 'recruitingstatus',
-                    title:'recruitingstatus',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/recruitingstatus',
-                    breadcrumbs: true
-                  },                 
-                  // {
-                  //   id: 'vieworgchart',
-                  //   title:'vieworgchart',
-                  //   type: 'item',
-                  //   url: '/dashboard/programmanagerview/org-chart',
-                  //   breadcrumbs: true
-                  // },
-                  {
-                    id: 'vieworg',
-                    title:'vieworg',
-                    type: 'collapse',
-                    children: [
-                        {
-                          id: 'staffingstatus',
-                          title:'Staffing Status',
-                          type: 'item',
-                          url: '/dashboard/programmanagerview/orgnization/basic',
-                          breadcrumbs: true
-                        },
-                        {
-                          id: 'orgnizationview',
-                          title:'Orgnization View',
-                          type: 'item',
-                          url: '/dashboard/programmanagerview/orgnization/personal',
-                          breadcrumbs: true
-                        }
-                    ]
-                  },
-                  {
-                    id: 'rosters',
-                    title:'rosters',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/rosters',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'pastmprs',
-                    title:'pastmprs',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/pastmprs',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'financialsummary',
-                    title:'financialsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/financialsummary',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'utilizationsummary',
-                    title:'utilizationsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/utilizationsummary',
-                    breadcrumbs: true
-                  }
-                ]
-              }
-            ]
-          };
-        }
-        if(newUsers[0].role.includes('Branch Manager')){
-          dashboard = {
-            id: 'group-dashboard',
-            title: 'dashboard',
-            type: 'group',
-            icon: 'dashboardOutlined',
-            children: [
-              {
-                id: 'branchmanagement',
-                title: 'branchmanagement',
-                type: 'collapse',
-                url: '/dashboard/branchmanagerview/contract',
-                icon: 'dashboardOutlined',
-                children: [   
-                  {
-                    id: 'recruitingstatus',
-                    title:'recruitingstatus',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/recruitingstatus',
-                    breadcrumbs: true
-                  },                         
-                  {
-                    id: 'vieworgchart',
-                    title:'vieworgchart',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/orgnization/personal',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'rosters',
-                    title:'rosters',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/rosters',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'workordermprs',
-                    title:'workordermprs',
-                    type: 'item',
-                    url: '/dashboard/branchmanagerview/workordermprs',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'financialsummary',
-                    title:'financialsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/financialsummary',
-                    breadcrumbs: true
-                  },
-                  {
-                    id: 'utilizationsummary',
-                    title:'utilizationsummary',
-                    type: 'item',
-                    url: '/dashboard/programmanagerview/utilizationsummary',
-                    breadcrumbs: true
-                  }
-                ]
-              }
-            ]
-          };
-        }
 
 }
 // ==============================|| MOCK SERVICES ||============================== //

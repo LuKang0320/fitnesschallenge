@@ -48,8 +48,8 @@ function ReactTable({ columns, data,handleAddNew }) {
   const filterTypes = useMemo(() => renderFilterTypes, []);
   const initialState = useMemo(
     () => ({
-      filters: [{ id: 'rolename', value: '' }],
-      hiddenColumns: ['userid', 'roleid'],
+      filters: [{ id: 'status', value: '' }],
+      hiddenColumns: ['id'],
       pageIndex: 0,
       pageSize: 10
     }),
@@ -89,8 +89,8 @@ function ReactTable({ columns, data,handleAddNew }) {
 
   // ================ Tab ================
 
-  const groups = ['All', ...new Set(data.map((item) => item.rolename))];
-  const countGroup = data.map((item) => item.rolename);
+  const groups = ['All', ...new Set(data.map((item) => item.status))];
+  const countGroup = data.map((item) => item.status);
   const counts = countGroup.reduce(
     (acc, value) => ({
       ...acc,
@@ -102,7 +102,7 @@ function ReactTable({ columns, data,handleAddNew }) {
   const [activeTab, setActiveTab] = useState(groups[0]);
 
   useEffect(() => {
-    setFilter('rolename', activeTab === 'All' ? '' : activeTab);
+    setFilter('status', activeTab === 'All' ? '' : activeTab);
     // eslint-disable-next-line
   }, [activeTab]);
 
@@ -151,20 +151,10 @@ function ReactTable({ columns, data,handleAddNew }) {
           />
         </Stack>
         <Stack direction={matchDownSM ? 'column' : 'row'} alignItems="center" spacing={matchDownSM ? 1 : 0}>
-          <TableRowSelection selected={Object.keys(selectedRowIds).length} />
-          {/* {headerGroups.map((group, index) => (
-            <Stack key={index} direction={matchDownSM ? 'column' : 'row'} spacing={1} {...group.getHeaderGroupProps()}>
-              {group.headers.map((column, i) => (
-                <Box key={i} {...column.getHeaderProps([{ className: column.className }])}>
-                  {column.canFilter ? column.render('Filter') : null}
-                </Box>
-              ))}
-            </Stack>
-          ))} */}
-          
+          <TableRowSelection selected={Object.keys(selectedRowIds).length} />         
               <AnimateButton>
                 <Button disableElevation startIcon={<AddIcon />} onClick={handleAddNew}  variant="outlined"   sx={{ my: 0, ml: 3, mr:3}}>
-                  Add New User
+                  New Fitness Challenge
                 </Button>
               </AnimateButton>
            
@@ -285,15 +275,15 @@ SelectionHeader.propTypes = {
   getToggleAllPageRowsSelectedProps: PropTypes.func
 };
 
-const ManageUsers = ({handlerSelect,handleAddNew}) => {
-  const { GetAllUsers,DeleteUser } = useHCSS();
+const ManageFitness = ({handlerSelect,handleAddNew}) => {
+  const { GetAllFitness,DeleteUser } = useHCSS();
   const {  alertPopup } = useSelector((state) => state.invoice);
   const [list, setList] = React.useState([]);
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   useEffect(() => {
     const init = async () => {   
-      let listsres = await GetAllUsers();
+      let listsres = await GetAllFitness();
       setList(listsres.data);
       
     };
@@ -319,7 +309,7 @@ const ManageUsers = ({handlerSelect,handleAddNew}) => {
                 close: false
               })
             );
-            let listsres = await GetAllUsers();
+            let listsres = await GetAllFitness();
             setList(listsres.data);
           }
           else{
@@ -361,22 +351,28 @@ const ManageUsers = ({handlerSelect,handleAddNew}) => {
   const columns = useMemo(
     () => [
       {
-        Header: 'User Name',
-        accessor: 'username',
+        Header: 'ID',
+        accessor: 'id',
         //className: 'cell-center'//,
         //disableFilters: true
       },
       {
-        Header: 'Role',
-        accessor: 'rolename'
+        Header: 'Name',
+        accessor: 'name',
+        //className: 'cell-center'//,
+        //disableFilters: true
       },
       {
-        Header: 'User ID',
-        accessor: 'userid'
+        Header: 'Start Date',
+        accessor: 'startdate'
       },
       {
-        Header: 'Role ID',
-        accessor: 'roleid'
+        Header: 'End Date',
+        accessor: 'enddate'
+      },
+      {
+        Header: 'Status',
+        accessor: 'status'
       },
       {
         Header: 'Actions',
@@ -404,9 +400,9 @@ const ManageUsers = ({handlerSelect,handleAddNew}) => {
   );
 };
 
-ManageUsers.propTypes = {
+ManageFitness.propTypes = {
   handlerSelect: PropTypes.func,
   handleAddNew: PropTypes.func
 };
 
-export default ManageUsers;
+export default ManageFitness;

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo, useEffect, Fragment, useState, useRef } from 'react';
+//import { useNavigate } from 'react-router';
 import React from 'react';
 // material-ui
 import {
@@ -14,34 +15,39 @@ import {
   TableHead,
   TableRow,
   useMediaQuery,
-  Tooltip
+  Button,Grid,Typography
 } from '@mui/material';
+import AnimateButton from 'components/@extended/AnimateButton';
 import { alpha, useTheme } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 
 // third-party
 import { useExpanded, useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
-import {  EditTwoTone } from '@ant-design/icons';
+
 
 // project import
 import MainCard from 'components/MainCard';
 import ScrollX from 'components/ScrollX';
-import IconButton from 'components/@extended/IconButton';
-import { CSVExport, HeaderSort, IndeterminateCheckbox, TablePagination, TableRowSelection } from 'components/third-party/ReactTable';
-import { renderFilterTypes, GlobalFilter } from 'utils/react-table';
 
+import { CSVExport, HeaderSort, IndeterminateCheckbox, TablePagination, TableRowSelection } from 'components/third-party/ReactTable';
+
+//import { dispatch , useSelector} from 'store';
+
+import { renderFilterTypes, GlobalFilter } from 'utils/react-table';
+import DailyBarChart from 'sections/dashboard/fitnessadmin/DailyBarChart';
 import useHCSS from 'hooks/useHCSS';
 
 // ==============================|| REACT TABLE ||============================== //
 
-function ReactTable({ columns, data }) {
+function FReactTable({ columns, data }) {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), []);
   const filterTypes = useMemo(() => renderFilterTypes, []);
   const initialState = useMemo(
     () => ({
-      filters: [{ id: 'staffingstatus', value: '' }],
-      hiddenColumns: ['id'],
+      filters: [{ id: 'rolename', value: '' }],
+      hiddenColumns: ['userid', 'roleid','rolename'],
       pageIndex: 0,
       pageSize: 10
     }),
@@ -81,8 +87,8 @@ function ReactTable({ columns, data }) {
 
   // ================ Tab ================
 
-  const groups = ['All', ...new Set(data.map((item) => item.staffingstatus))];
-  const countGroup = data.map((item) => item.staffingstatus);
+  const groups = ['All', ...new Set(data.map((item) => item.rolename))];
+  const countGroup = data.map((item) => item.rolename);
   const counts = countGroup.reduce(
     (acc, value) => ({
       ...acc,
@@ -94,13 +100,13 @@ function ReactTable({ columns, data }) {
   const [activeTab, setActiveTab] = useState(groups[0]);
 
   useEffect(() => {
-    setFilter('staffingstatus', activeTab === 'All' ? '' : activeTab);
+    setFilter('rolename', activeTab === 'All' ? '' : activeTab);
     // eslint-disable-next-line
   }, [activeTab]);
 
   return (
     <>
-      <Box sx={{ p: 3, pb: 0, width: '100%' }}>
+      <Box sx={{ p: 0, pb: 0, width: '100%',display: 'none' }}>
         <Tabs value={activeTab} onChange={(e, value) => setActiveTab(value)} sx={{ borderBottom: 1, borderColor: 'divider' }}>
           {groups.map((status, index) => (
             <Tab
@@ -112,13 +118,18 @@ function ReactTable({ columns, data }) {
                   label={
                     status === 'All'
                       ? data.length
-                      : status === 'Open'
-                      ? counts.Open
-                      : status === 'Full'
-                      ? counts.Full
-                      : counts.Open
+                      : status === 'Project Staff Member'
+                      ? counts['Project Staff Member']
+                      : status === 'Branch Manager'
+                      ? counts['Branch Manager']
+                      : status === 'Incatech Accounting'
+                      ? counts['Incatech Accounting']
+                      : status === 'Program Manager'
+                      ? counts['Program Manager']
+                      :0
+                      
                   }
-                  color={status === 'All' ? 'primary' : status === 'Open' ? 'success' : status === 'Full' ? 'warning' : 'error'}
+                  color={status === 'All' ? 'primary' : status === 'Project Staff Member' ? 'success' : status === 'Branch Manager' ? 'warning' : 'error'}
                   variant="light"
                   size="small"
                 />
@@ -128,7 +139,7 @@ function ReactTable({ columns, data }) {
           ))}
         </Tabs>
       </Box>
-      <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} justifyContent="space-between" alignItems="center" sx={{ p: 3, pb: 3 }}>
+      <Stack direction={matchDownSM ? 'column' : 'row'} spacing={1} justifyContent="space-between" alignItems="center" sx={{ p:0, pb: 3,display: 'none' }}>
         <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2}>
           <GlobalFilter
             preGlobalFilteredRows={preGlobalFilteredRows}
@@ -138,15 +149,21 @@ function ReactTable({ columns, data }) {
           />
         </Stack>
         <Stack direction={matchDownSM ? 'column' : 'row'} alignItems="center" spacing={matchDownSM ? 1 : 0}>
-          <TableRowSelection selected={Object.keys(selectedRowIds).length} />
-          <CSVExport data={data} filename={'workorderrecruitingstatus.csv'} />
+          <TableRowSelection selected={Object.keys(selectedRowIds).length} />       
+              <AnimateButton>
+                <Button disableElevation startIcon={<AddIcon />}  variant="outlined"   sx={{ my: 0, ml: 3, mr:3}}>
+                  Add New User
+                </Button>
+              </AnimateButton>
+           
+          <CSVExport data={data} filename={'allusers.csv'} />
         </Stack>
       </Stack>
       <Box ref={componentRef}>
         <Table {...getTableProps()}>
           <TableHead>
             {headerGroups.map((headerGroup, i) => (
-              <TableRow key={i} {...headerGroup.getHeaderGroupProps()} sx={{ '& > th:first-of-type': { width: '200px' } }}>
+              <TableRow key={i} {...headerGroup.getHeaderGroupProps()} sx={{ '& > th:first-of-type': { width: '220px' } }}>
                 {headerGroup.headers.map((column, x) => (
                   <TableCell key={x} {...column.getHeaderProps([{ className: column.className }])}>
                     <HeaderSort column={column} sort />
@@ -189,57 +206,11 @@ function ReactTable({ columns, data }) {
   );
 }
 
-ReactTable.propTypes = {
+FReactTable.propTypes = {
   columns: PropTypes.array,
   data: PropTypes.array
 };
 
-// ==============================|| INVOICE - LIST ||============================== //
-
-
-// Status
-const StatusCell = ({ value }) => {
-  switch (value) {
-
-    case 'Open':
-      return <Chip color="warning" label="Open" size="small" variant="light" />;
-    case 'Full':
-      return <Chip color="success" label="Full" size="small" variant="light" />;
-  }
-};
-
-StatusCell.propTypes = {
-  value: PropTypes.string
-};
-
-// Action Cell
-const ActionCell = (row, theme,handlerSelect) => {
-  return (
-    <Stack direction="row" alignItems="left" justifyContent="left" spacing={0}>
-      
-      <Tooltip title="Edit">
-        <IconButton
-          color="primary"
-          onClick={(e) => {
-            e.stopPropagation();
-            //console.log(row);
-            //navigation(`/apps/invoice/edit/${row.values.id}`);
-            handlerSelect(row);
-          }}
-        >
-          <EditTwoTone twoToneColor={theme.palette.primary.main} />
-        </IconButton>
-      </Tooltip>
-    </Stack>
-  );
-};
-
-ActionCell.propTypes = {
-  row: PropTypes.array,
-  //navigation: PropTypes.func,
-  theme: PropTypes.object,
-  handlerSelect: PropTypes.func
-};
 
 // Section Cell and Header
 const SelectionCell = ({ row }) => <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />;
@@ -255,116 +226,74 @@ SelectionHeader.propTypes = {
   getToggleAllPageRowsSelectedProps: PropTypes.func
 };
 
-const Recruitingstatus = ({handlerSelect}) => {
-  const { GetAllWorkOrdersRecruitingStatus } = useHCSS();
-  const localUsers = window.localStorage.getItem('users');
-  var newUsers = JSON.parse(localUsers);
-  //console.log(newUsers[0]);
-  var userid = 'all';
-  if(newUsers[0].role.includes('Branch Manager')){
-    userid = newUsers[0].id;
-  }
+const Adminlandingview = () => {
+  const { GetAllUsers } = useHCSS();
+
   const [list, setList] = React.useState([]);
+
+   const [fitnessdata, setFitnessdata] = useState([]);
   useEffect(() => {
-    const init = async () => {  
-      let listsres = await GetAllWorkOrdersRecruitingStatus(userid);
-      setList(listsres.data);   
+    const init = async () => {   
+      let listsres = await GetAllUsers(1);
+      setList(listsres.data);
+      setFitnessdata([10,20,30,40,50,60,70,80,40,50,60,70,80]);
     };
+
     init();
   }, []);
 
-  var columns = useMemo(
+  const columns = useMemo(
     () => [
       {
-        Header: 'Work Order Id',
-        accessor: 'id',
-        className: 'cell-center',
-        disableFilters: true
+        Header: 'User Name',
+        accessor: 'username',
+        //className: 'cell-center'//,
+        //disableFilters: true
       },
       {
-        Header: 'Work Order',
-        accessor: 'workorder'
+        Header: 'Role',
+        accessor: 'rolename'
       },
       {
-        Header: 'Recruiting Status',
-        accessor: 'recruitingstatus'
+        Header: 'User ID',
+        accessor: 'userid'
       },
       {
-        Header: 'Branch',
-        accessor: 'aaqbranch'
-      },
-
-      {
-        Header: 'Staffing',
-        accessor: 'staffingstatus',
-        //disableFilters: true,
-        filter: 'includes',
-        Cell: StatusCell
-      }//,
-      // {
-      //   Header: 'Actions',
-      //   //className: 'cell-center',
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => ActionCell(row, theme, handlerSelect)
-      // }
+        Header: 'Total Minutes',
+        //accessor: 'roleid'
+      }
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  if(newUsers[0].role.includes('Program Manager')){
-    columns =  [
-        {
-          Header: 'Work Order Id',
-          accessor: 'id',
-          className: 'cell-center',
-          disableFilters: true
-        },
-        {
-          Header: 'Work Order',
-          accessor: 'workorder'
-        },
-        {
-          Header: 'Recruiting Status',
-          accessor: 'recruitingstatus'
-        },
-        {
-          Header: 'Branch',
-          accessor: 'aaqbranch'
-        },
-  
-        {
-          Header: 'Staffing',
-          accessor: 'staffingstatus',
-          //disableFilters: true,
-          filter: 'includes',
-          Cell: StatusCell
-        },
-        {
-          Header: 'Actions',
-          //className: 'cell-center',
-          disableSortBy: true,
-          Cell: ({ row }) => ActionCell(row, theme, handlerSelect)
-        }
-      ];
-  }
-
-  const theme = useTheme();
 
   return (
-    <>
-
-      <MainCard content={false}>
-        <ScrollX>
-          <ReactTable columns={columns} data={list} />
-        </ScrollX>
-      </MainCard>
-    </>
+    <Grid container spacing={1}>
+        <Grid item xs={12} sm={6}>
+          <MainCard content={false}>
+            <ScrollX>
+              <FReactTable columns={columns} data={list} />
+            </ScrollX>
+          </MainCard>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <MainCard sx={{ mt: 0, mb:1 }} content={false}>
+              <Box sx={{ p: 2, pb: 0 }}>
+                <Stack spacing={0.5}>
+                  <Typography variant="h6" >
+                    Statistics: 180 minutes
+                  </Typography>
+                </Stack>
+              </Box>
+              <DailyBarChart rdata={fitnessdata}/>
+            </MainCard>
+          </Grid>
+      </Grid>
   );
 };
 
-Recruitingstatus.propTypes = {
-  handlerSelect: PropTypes.func
+Adminlandingview.propTypes = {
 };
 
-export default Recruitingstatus;
+export default Adminlandingview;

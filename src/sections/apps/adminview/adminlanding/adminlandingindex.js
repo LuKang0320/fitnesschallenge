@@ -4,55 +4,49 @@ import PropTypes from 'prop-types';
 import { Button, Stack } from '@mui/material';
 
 // project imports
-import Rosters from './rosters';
-import Rosteredit from './rosteredit';
-//import FinancialSummary from './FinancialSummary';
-//import UtilizationSummary from './UtilizationSummary';
+import AdminLandingView from './adminlandingview';
 import MainCard from 'components/MainCard';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // step options
-const steps = ['Recruiting Status', 'Edit Recruiting Status'];
+const steps = ['All User', 'Manage User', 'Add New User', 'Manage Branch User'];
 
-const GetStepContent = ({ handlenext, step, activeRowData }) => {
+const GetStepContent = ({ handlenext, step }) => {
   switch (step) {
     case 0:
-      return <Rosters handlerSelect={handlenext}/>;
-    case 1:
-      return <Rosteredit  activeRowData={activeRowData}/>;
-    // case 2:
-    //   return <FinancialSummary activeRowData={activeRowData}/>;
-    // case 3:
-    //   return <UtilizationSummary activeRowData={activeRowData}/>;
+      return <AdminLandingView handlerSelect={handlenext} />;
     default:
       return <></>
   }
 }
 GetStepContent.propTypes = {
   handlenext: PropTypes.func,
-  step: PropTypes.number,
-  activeRowData: PropTypes.object
+  step: PropTypes.number
 };
 // ==============================|| FORMS WIZARD - BASIC ||============================== //
 
-const Rosterindex = () => {
+const AdminlandingIndex = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [activeRowData, setActiveRowData] = useState({});
-  //console.log(activeRowData);
   const handleNext = (row) => {
-    setActiveStep(1);
-    setActiveRowData(row);
+    console.log(row);
+    if(row.values.rolename === 'Branch Manager'){
+      setActiveStep(3);
+    }
+    if(row.values.rolename === 'Project Staff Member'){
+
+      setActiveStep(1);
+    }
   };
 
   const handleBack = () => {
     setActiveStep(0);
-    setActiveRowData({});
   };
 
   return (
     <MainCard >
       <>
-            <GetStepContent step={activeStep} handlenext={handleNext} activeRowData={activeRowData}/>
+          
+            <GetStepContent step={activeStep} handlenext={handleNext} />
             <Stack direction="row" justifyContent={activeStep !== 0 ? 'space-between' : 'flex-end'}>
               {activeStep !== 0 && (
                 <Button variant="contained" onClick={handleBack} sx={{ my: 3, ml: 1 }}>
@@ -75,4 +69,4 @@ const Rosterindex = () => {
   );
 };
 
-export default Rosterindex;
+export default AdminlandingIndex;

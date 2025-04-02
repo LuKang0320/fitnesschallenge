@@ -364,35 +364,7 @@ services.onPost('/api/hcss/GetAllWorkOrders').reply(async () => {
   }
 });
 
-services.onPost('/api/hcss/GetAllUsers').reply(async () => {
-  try {
-    await delay(500);
 
-    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/hcss/GetAllUsers?', {
-      method:'get'
-    });
-    let loginres = await response.json();
-
-    //console.log(loginres);
-    var res = [];
-    loginres.map(r=> {
-      res.push(r)
-    })
-    if(response.ok){
-      return [
-        200,
-        {data: res}
-      ];
-    }
-    else {
-      return [400, { message: loginres.error_description }];
-    }
-
-  } catch (err) {
-    console.error(err);
-    return [500, { message: 'Server Error' }];
-  }
-});
 
 services.onPost('/api/hcss/GetAllUserRoles').reply(async () => {
   try {
@@ -1409,6 +1381,122 @@ services.onPost('/api/fitness/GetEmployeeDailyUpdatesByUserID').reply(async (req
       return [
         200,
         {data: res}
+      ];
+    }
+    else {
+      return [400, { message: loginres.error_description }];
+    }
+
+  } catch (err) {
+    console.error(err);
+    return [500, { message: 'Server Error' }];
+  }
+});
+
+
+services.onPost('/api/fitness/GetAllUsers').reply(async (request) => {
+  try {
+    await delay(500);
+    const { fitid } = JSON.parse(request.data);
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetAllUsers?'+ new URLSearchParams({
+      fitid: fitid
+  }), {
+      method:'get'
+    });
+    let loginres = await response.json();
+
+    //console.log(loginres);
+    var res = [];
+    loginres.map(r=> {
+      res.push(r)
+    })
+    if(response.ok){
+      return [
+        200,
+        {data: res}
+      ];
+    }
+    else {
+      return [400, { message: loginres.error_description }];
+    }
+
+  } catch (err) {
+    console.error(err);
+    return [500, { message: 'Server Error' }];
+  }
+});
+services.onPost('/api/fitness/GetAllFitness').reply(async () => {
+  try {
+    await delay(500);
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetAllFitness?', {
+      method:'get'
+    });
+    let loginres = await response.json();
+
+    //console.log(loginres);
+    var res = [];
+    loginres.map(r=> {
+      res.push(r)
+    })
+    if(response.ok){
+      return [
+        200,
+        {data: res}
+      ];
+    }
+    else {
+      return [400, { message: loginres.error_description }];
+    }
+
+  } catch (err) {
+    console.error(err);
+    return [500, { message: 'Server Error' }];
+  }
+});
+
+
+services.onPost('/api/fitness/AddNewFitnessActivityRecord').reply(async (request) => {
+  try {
+    await delay(500);
+
+    const { fitnesschallengeid,activity,totalminutes,activityid,datestring } = JSON.parse(request.data);
+    var userid = '';
+    var username = '';
+    if (window.localStorage.getItem('serviceToken') !== undefined && window.localStorage.getItem('serviceToken') !== null) {
+      const serviceToken = window.localStorage.getItem('serviceToken');
+      const jwData = jwtDecode(serviceToken);
+      const { userId } = jwData;
+      userid = userId;
+    }
+
+    if(window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null)
+    { 
+      const localUsers = window.localStorage.getItem('users');
+       var newUsers = JSON.parse(localUsers);
+       username=newUsers[0].name;
+    }
+
+
+    //const d = new Date();
+    let formData = new FormData();
+        formData.append('fitnesschallengeid', fitnesschallengeid);
+        formData.append('activity', activity);
+        formData.append('totalminutes', totalminutes);
+        formData.append('activityid', activityid);
+        formData.append('userid', userid);
+        formData.append('username', username);
+        formData.append('datestring', datestring);
+
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/AddNewFitnessActivityRecord', {
+      method:'post',
+      body: new URLSearchParams(formData)
+    });
+    let loginres = await response.json();
+
+    if(response.ok){
+      return [
+        200,
+        {res: loginres}
       ];
     }
     else {

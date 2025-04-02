@@ -9,14 +9,14 @@ export const LAYOUT_CONST = {
   HORIZONTAL_LAYOUT: 'horizontal'
 };
 
-export const APP_DEFAULT_PATH = '/dashboard/analytics';
+export const APP_DEFAULT_PATH = '/dashboard/employeeview';
 export const HORIZONTAL_MAX_ITEM = 6;
 export const DRAWER_WIDTH = 260;
 
 // ==============================|| THEME CONFIG  ||============================== //
 
 const config = {
-  APP_DEFAULT_PATH: '/dashboard/analytics',
+  APP_DEFAULT_PATH: '/dashboard/employeeview',
   /**
    * The props used for the theme font-style.
    * We provide static below options -

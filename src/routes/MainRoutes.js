@@ -10,31 +10,33 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 const DashboardAnalytics = Loadable(lazy(() => import('pages/dashboard/analytics')));
 const EmployeeView = Loadable(lazy(() => import('pages/dashboard/employeeview')));
-const FinancialPersonnelView = Loadable(lazy(() => import('pages/dashboard/financialpersonnelview')));
 
-const ProgramPanagerViewTabContract = Loadable(lazy(() => import('sections/apps/programmanagerview/TabContract')));
-const ProgramPanagerViewCreateWorkOrder = Loadable(lazy(() => import('sections/apps/programmanagerview/workorder/createworkorder')));
-const ProgramPanagerViewViewWorkOrders = Loadable(lazy(() => import('sections/apps/programmanagerview/workorder/viewworkordersindex')));
-const ProgramPanagerViewViewRecruitingStatus = Loadable(lazy(() => import('sections/apps/programmanagerview/recruitingstatus/recruitingstatusindex')));
-const ProgramPanagerViewViewOrgChart = Loadable(lazy(() => import('sections/apps/programmanagerview/org-chart')));
-const ProgramPanagerViewViewFinancials = Loadable(lazy(() => import('sections/apps/programmanagerview/financials')));
-const ProgramPanagerViewViewProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/progressreport')));
-const ProgramPanagerViewViewWOProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/woprogressreport')));
-const ProgramPanagerViewViewRosters = Loadable(lazy(() => import('sections/apps/programmanagerview/roster/rosterindex')));
-const ProgramPanagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastmprs')));
-const ProgramPanagerViewFinancial = Loadable(lazy(() => import('sections/apps/programmanagerview/FinancialSummaryPage')));
-const ProgramPanagerViewUtilization = Loadable(lazy(() => import('sections/apps/programmanagerview/utilization/utilizationsummaryindex')));
-const ProgramPanagerViewViewAllUsers = Loadable(lazy(() => import('sections/apps/programmanagerview/manageusers/manageusersindex')));
+//const FinancialPersonnelView = Loadable(lazy(() => import('pages/dashboard/financialpersonnelview')));
 
-
-const ProgramPanagerViewOrgProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/orgnization')));
-const ProgramPanagerViewOrgTabProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabProfile')));
-const ProgramPanagerViewOrgTabProfile1 = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabPersonal')));
+// const ProgramPanagerViewTabContract = Loadable(lazy(() => import('sections/apps/programmanagerview/TabContract')));
+const ProgramPanagerViewFitness = Loadable(lazy(() => import('sections/apps/adminview/managefitness/managefitnessindex')));
+// const ProgramPanagerViewViewWorkOrders = Loadable(lazy(() => import('sections/apps/programmanagerview/workorder/viewworkordersindex')));
+// const ProgramPanagerViewViewRecruitingStatus = Loadable(lazy(() => import('sections/apps/programmanagerview/recruitingstatus/recruitingstatusindex')));
+// const ProgramPanagerViewViewOrgChart = Loadable(lazy(() => import('sections/apps/programmanagerview/org-chart')));
+// const ProgramPanagerViewViewFinancials = Loadable(lazy(() => import('sections/apps/programmanagerview/financials')));
+// const ProgramPanagerViewViewProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/progressreport')));
+// const ProgramPanagerViewViewWOProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/woprogressreport')));
+// const ProgramPanagerViewViewRosters = Loadable(lazy(() => import('sections/apps/programmanagerview/roster/rosterindex')));
+// const ProgramPanagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastmprs')));
+// const ProgramPanagerViewFinancial = Loadable(lazy(() => import('sections/apps/programmanagerview/FinancialSummaryPage')));
+// const ProgramPanagerViewUtilization = Loadable(lazy(() => import('sections/apps/programmanagerview/utilization/utilizationsummaryindex')));
+const ProgramPanagerViewViewAllUsers = Loadable(lazy(() => import('sections/apps/adminview/manageusers/manageusersindex')));
+const ProgramPanagerLandingViewAllUsers = Loadable(lazy(() => import('sections/apps/adminview/adminlanding/adminlandingindex')));
 
 
-const DivisionManagerViewTabContract = Loadable(lazy(() => import('sections/apps/divisionmanagerview/TabContract')));
-const BranchManagerViewTabContract = Loadable(lazy(() => import('sections/apps/branchmanagerview/TabContract')));
-const BranchManagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastwomprs')));
+// const ProgramPanagerViewOrgProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/orgnization')));
+// const ProgramPanagerViewOrgTabProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabProfile')));
+// const ProgramPanagerViewOrgTabProfile1 = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabPersonal')));
+
+
+// const DivisionManagerViewTabContract = Loadable(lazy(() => import('sections/apps/divisionmanagerview/TabContract')));
+// const BranchManagerViewTabContract = Loadable(lazy(() => import('sections/apps/branchmanagerview/TabContract')));
+// const BranchManagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastwomprs')));
 
 // render - widget
 const WidgetStatistics = Loadable(lazy(() => import('pages/widget/statistics')));
@@ -163,105 +165,17 @@ const MainRoutes = {
               path: 'analytics',
               element: <DashboardAnalytics />
             },
-            
             {
-              path: 'divisionmanagerview',
-              //element: <ProgramManagerView />,
+              path: 'adminview',
+              //element: <ProgramPanagerLandingViewAllUsers />,
               children: [
                 {
-                  path: 'contract',
-                  element: <DivisionManagerViewTabContract/>
-                },
-              ]
-            },
-            {
-              path: 'branchmanagerview',
-              //element: <ProgramManagerView />,
-              children: [
-                {
-                  path: 'contract',
-                  element: <BranchManagerViewTabContract/>
-                },
-
-                {
-                  path: 'workordermprs',
-                  element: <BranchManagerViewPastMPRS/>
-                }
-                
-              ]
-            },
-
-
-            
-            {
-              path: 'programmanagerview',
-              //element: <ProgramManagerView />,
-              children: [
-                {
-                  path: 'contract',
-                  element: <ProgramPanagerViewTabContract/>
+                  path: 'adminlanding',
+                  element: <ProgramPanagerLandingViewAllUsers/>
                 },
                 {
-                  path: 'createworkorder',
-                  element: <ProgramPanagerViewCreateWorkOrder/>
-                },
-                {
-                  path: 'viewworkorders',
-                  element: <ProgramPanagerViewViewWorkOrders/>
-                },
-                {
-                  path: 'recruitingstatus',
-                  element: <ProgramPanagerViewViewRecruitingStatus/>
-                },
-                
-                {
-                  path: 'progressreport',
-                  element: <ProgramPanagerViewViewProgressReport/>
-                },
-                {
-                  path: 'woprogressreport',
-                  element: <ProgramPanagerViewViewWOProgressReport/>
-                },
-                
-                {
-                  path: 'org-chart',
-                  element: <ProgramPanagerViewViewOrgChart/>
-                },
-
-                {
-                  path: 'orgnization',
-                  element: <ProgramPanagerViewOrgProfile />,
-                  children: [
-                    {
-                      path: 'basic',
-                      element: <ProgramPanagerViewOrgTabProfile />
-                    },
-                    {
-                      path: 'personal',
-                      element: <ProgramPanagerViewOrgTabProfile1 />
-                    }
-                  ]
-                },
-
-                {
-                  path: 'financials',
-                  element: <ProgramPanagerViewViewFinancials/>
-                },
-                {
-                  path: 'rosters',
-                  element: <ProgramPanagerViewViewRosters/>
-                },
-                {
-                  path: 'pastmprs',
-                  element: <ProgramPanagerViewPastMPRS/>
-                },
-                {
-                  path: 'financialsummary',
-                  element: <ProgramPanagerViewFinancial/>
-                },              
-                {
-                  path: 'utilizationsummary',
-                  element: <ProgramPanagerViewUtilization/>
+                  path: 'managefitness',
+                  element: <ProgramPanagerViewFitness/>
                 },
                 {
                   path: 'manageusers',
@@ -274,11 +188,12 @@ const MainRoutes = {
             {
               path: 'employeeview',
               element: <EmployeeView />
-            },
-            {
-              path: 'financialpersonnelview',
-              element: <FinancialPersonnelView/>
             }
+            // ,
+            // {
+            //   path: 'financialpersonnelview',
+            //   element: <FinancialPersonnelView/>
+            // }
             
           ]
         },

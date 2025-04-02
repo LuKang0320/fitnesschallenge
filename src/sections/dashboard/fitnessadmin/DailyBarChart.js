@@ -58,8 +58,7 @@ const DailyBarChart = ({rdata}) => {
   const info = theme.palette.info.light;
 
   var [series] = useState([
-    {
-      name: 'Munites',
+    {name: 'Munites',
       data: rdata
     }
   ]);
@@ -74,7 +73,7 @@ if(rdata.length > 0){
 else{
    series= [
     {name: 'Munites',
-      data: [0, 0, 0, 0, 0, 0, 0,0, 0,0, 0,0, 0]
+      data: [0, 0, 0, 0, 0, 0, 0,0,0, 0, 0, 0,0]
     }
   ];
 }

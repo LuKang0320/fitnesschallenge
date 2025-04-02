@@ -2,7 +2,7 @@ import React from 'react';
 import {  useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 // material-ui
-import {FormControl, Select, Button, Divider, Grid, FormHelperText, InputLabel,MenuItem, Stack, 
+import {FormControl, Select, Button, Grid, FormHelperText, InputLabel,MenuItem, Stack, 
   Typography, Box,TextField 
  } from '@mui/material';
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -26,8 +26,9 @@ import dayjs from "dayjs";
 
 const EmployeeView = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [loginuserid, setLoginuserid] = useState('');
   const dispatch = useDispatch();
-  const { saveinchtechstaffmonthlyupdates,GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID } = useHCSS();
+  const {AddNewFitnessActivityRecord,GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID } = useHCSS();
   //const scriptedRef = useScriptRef();
   const [fitnessactivity, setFitnessactivity] = React.useState('');
   const [fitnessactivities, setFitnessactivities] = React.useState([]);
@@ -35,25 +36,64 @@ const EmployeeView = () => {
   const [usermonthlyupdate, setUsermonthlyupdate] = React.useState({});
 
   const [isdisabled, setIsdisabled] = React.useState(true);
+  const [fitnessdata, setFitnessdata] = useState([]);
+  const [latestfitness, setLatestfitness] = useState({});
+
 
 
   useEffect(() => {
     const init = async () => {
+      if(window.localStorage.getItem('latestFitness') !== undefined)
+        { 
+          const latestFitnessC = window.localStorage.getItem('latestFitness');
+           var lFitness = JSON.parse(latestFitnessC);
+           setLatestfitness(lFitness);
+        }
        await reloadUpdates();
     };
 
     init();
   }, []);
 
+
+function newchartdata (items) {
+      // Step 1: Create a map for quick lookup
+      const idMap = {};
+      items.forEach(item => {
+        idMap[item.activityid] = item;
+      });
+
+      // Step 2: Find the max ID
+      const maxId = 13;
+
+      // Step 3: Build the final array
+      const orderedArray = [];
+
+      for (let i = 1; i <= maxId; i++) {
+        if (idMap[i]) {
+          orderedArray.push(idMap[i].totalminutes);
+        } else {
+          orderedArray.push(0);
+        }
+      }
+      return orderedArray;
+}
+
   const reloadUpdates = async () =>{
+    
+      //console.log(latestfitness);
         const serviceToken = window.localStorage.getItem('serviceToken');
         const jwData = jwtDecode(serviceToken);
         const { userId } = jwData;
+        setLoginuserid(userId);
         let workordersres = await GetAllFitnessActivities();
         setFitnessactivities(workordersres.data);
         let updatesres = await GetEmployeeDailyUpdatesByUserID(userId, selectedDate);
-        setUsermonthlyupdates(updatesres.data);       
-        //console.log(updatesres.data);
+        setUsermonthlyupdates(updatesres.data);    
+      
+        var newdata = newchartdata(updatesres.data);
+        setFitnessdata(newdata);
+
         var wid = [];
         var workid = [];
         for (var i = 0; i < workordersres.data.length; i++) 
@@ -65,45 +105,43 @@ const EmployeeView = () => {
           
             wid.push(workordersres.data[i].name);
             workid.push(workordersres.data[i].id);
-        }
-        //console.log(wid.length);  
+        } 
         if(wid.length > 0)
         {
           //setWorkorderwarning("Work Order " + wid.toString() + " still need to be updated");
           setFitnessactivity(workid[0]);
-          workorderselectchange(workid[0],updatesres.data);
+          fitnessselectchange(workid[0],updatesres.data);
         }
         else 
         {
-          //console.log(workordersres.data.length);  
             if(workordersres.data.length > 0)
               {
               setFitnessactivity(workordersres.data[0].id);
-              workorderselectchange(workordersres.data[0].id,updatesres.data);
+              fitnessselectchange(workordersres.data[0].id,updatesres.data);
             }
         }        
       };
     
-  const handleworkorderselectChange = async(event) => {
+  const handlefitnessselectChange = async(event) => {
 
-    workorderselectchange(event.target.value, usermonthlyupdates);
+    fitnessselectchange(event.target.value, usermonthlyupdates);
   
   };
 
-  function workorderselectchange(workorderid, ups){
-    setFitnessactivity(workorderid);
+  function fitnessselectchange(fitnessid, ups){
+    setFitnessactivity(fitnessid);
 
     var result = [];
     if(usermonthlyupdates > 0)
     {
       result = usermonthlyupdates.filter(obj => {
-          return obj.activityid === workorderid
+          return obj.activityid === fitnessid
         })
       }
       else {
         if(ups.length > 0){
           result = ups.filter(obj => {
-            return obj.activityid === workorderid
+            return obj.activityid === fitnessid
           })
         }
       }
@@ -126,9 +164,18 @@ const EmployeeView = () => {
         initialValues[field] = inputs[field];
       }
   }
-  //console.log(initialValues);
     return initialValues;
   }
+
+  const handledateselectChange = async(newdate) => {
+
+    setSelectedDate(dayjs(newdate).format("YYYY-MM-DD"));
+    let updatesres = await GetEmployeeDailyUpdatesByUserID(loginuserid, dayjs(newdate).format("YYYY-MM-DD"));
+        setUsermonthlyupdates(updatesres.data);    
+        fitnessselectchange(fitnessactivity, updatesres.data); 
+        var newdata = newchartdata(updatesres.data);
+        setFitnessdata(newdata);
+  };
 
   return (
     <>
@@ -139,8 +186,10 @@ const EmployeeView = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DesktopDatePicker
                     label="Select a date"
+                    minDate={latestfitness.startdate}
+                    maxDate={latestfitness.enddate}
                     value={selectedDate}
-                    onChange={(newValue) => setSelectedDate(newValue)}
+                    onChange={(newValue) => {handledateselectChange(newValue)}}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -150,11 +199,11 @@ const EmployeeView = () => {
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack spacing={0.5}>
                   <Typography variant="h6" >
-                    Today Statistics: 180 minutes
+                    Statistics: 180 minutes
                   </Typography>
                 </Stack>
               </Box>
-              <DailyBarChart />
+              <DailyBarChart rdata={fitnessdata}/>
             </MainCard>
           </Grid>
      <Grid item xs={12} >
@@ -171,11 +220,11 @@ const EmployeeView = () => {
             totalminutes: Yup.string().max(12400).required('Minutes Performed is required')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting ,resetForm }) => {
-            try {
-            var res= await saveinchtechstaffmonthlyupdates(values.totalminutes, fitnessactivity,ccyear, cmonth);
-              //console.log(res);
+            try {   //fitnesschallengeid,activity,totalminutes,activityid,datestring
+              var fitem= fitnessactivities.find(item => item.id === fitnessactivity);
+            var res= await AddNewFitnessActivityRecord(latestfitness.id, fitem.name,values.totalminutes,
+               fitnessactivity,selectedDate);
               if(res.res.success == true){
-                window.open(res.res.msg,'_blank');
                 dispatch(
                   openSnackbar({
                     open: true,
@@ -192,7 +241,7 @@ const EmployeeView = () => {
                   })
                 );
                 reloadUpdates();
-                resetForm();
+                 resetForm();
                 setStatus({ success: true });
                 setSubmitting(false);
                 setIsdisabled(true);
@@ -217,28 +266,15 @@ const EmployeeView = () => {
         >
           {({ errors,   handleBlur, handleChange,handleSubmit, isSubmitting ,touched,values,resetForm}) => (
             <form noValidate onSubmit={handleSubmit}>
-              <MainCard title={"Employee Fitness Challenge Daily Updates"}>
+              <MainCard title={latestfitness.name +" -- Employee Fitness Challenge Daily Updates"}>
             <Grid container spacing={2} alignItems="center" >              
-            <Grid item xs={12}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DesktopDatePicker
-                    label="Select a date"
-                    value={selectedDate}
-                    onChange={(newValue) => setSelectedDate(newValue)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                </Grid>
-              <Grid item xs={12}>
-                <Divider />
-              </Grid>
 
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={6}>
               <FormControl
             variant="outlined"
-            style={{ width: "100%", marginBottom: 3, marginLeft: 15 }}
+            style={{ width: "100%", marginTop:10, marginBottom: 3, marginLeft: 3 }}
           >
-            
-              <Grid item xs={12}>
                 <InputLabel id="fitnessactivities-select-label">Fitness Activities</InputLabel>
                 <Select   style={{ width: "100%" }}
                   variant="outlined"
@@ -249,20 +285,24 @@ const EmployeeView = () => {
                   
                   onChange={(e) => { 
                     resetForm();
-                    handleworkorderselectChange(e);
+                    handlefitnessselectChange(e);
                 }}
                 >
                   {fitnessactivities.map((w,index)=>{
                   return <MenuItem value={w.id} key={index}>{w.name}</MenuItem>
                   })}
                 </Select>
+                </FormControl>
               </Grid>
-              </FormControl>
+             
 
               
-              <Grid item xs={12}>
-                <InputLabel>Minutes Performed</InputLabel>
-                <TextField id="totalminutes"  type="number"
+              <Grid item xs={12} sm={6}>
+              <FormControl
+            variant="outlined"
+            style={{ width: "100%", marginTop:10, marginBottom: 3, marginLeft: 3}}
+          >
+                <TextField id="totalminutes"  type="number"  label={"Minutes Performed"}
                 fullWidth placeholder="Please Enter Minutes Performed" onBlur={handleBlur}
                       onChange={handleChange}  value={values.totalminutes} 
                       error={Boolean(touched.totalminutes && errors.totalminutes)}/>
@@ -271,9 +311,10 @@ const EmployeeView = () => {
                         {errors.totalminutes}
                       </FormHelperText>
                     )}
-                {/* <FormHelperText>Please enter your work performed</FormHelperText> */}
-              </Grid>            
-
+              </FormControl>
+              </Grid>    
+              </Grid>        
+              
               {errors.submit && (
                   <Grid item xs={12}>
                     <FormHelperText error>{errors.submit}</FormHelperText>
