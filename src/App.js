@@ -25,11 +25,23 @@ import { fetchDashboard } from 'store/reducers/menu';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
-
+  //console.log("App is rendering!");
+  // useEffect(() => {
+  //   dispatch(fetchDashboard()).then(() => {
+  //     setLoading(true);
+  //   });
+  // }, []);
   useEffect(() => {
-    dispatch(fetchDashboard()).then(() => {
-      setLoading(true);
-    });
+    const load = async () => {
+      try {
+        await dispatch(fetchDashboard());
+      } catch (err) {
+        console.error('Failed to load dashboard:', err);
+      } finally {
+        setLoading(true);
+      }
+    };
+    load();
   }, []);
 
   if (!loading) return <Loader />;
@@ -39,6 +51,7 @@ const App = () => {
         <Locales>
           <ScrollTop>
             <AuthProvider>
+            
               <HCSSProvider>
               <>
                 <Notistack>

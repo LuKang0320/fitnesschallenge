@@ -11,32 +11,10 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')))
 const DashboardAnalytics = Loadable(lazy(() => import('pages/dashboard/analytics')));
 const EmployeeView = Loadable(lazy(() => import('pages/dashboard/employeeview')));
 
-//const FinancialPersonnelView = Loadable(lazy(() => import('pages/dashboard/financialpersonnelview')));
 
-// const ProgramPanagerViewTabContract = Loadable(lazy(() => import('sections/apps/programmanagerview/TabContract')));
 const ProgramPanagerViewFitness = Loadable(lazy(() => import('sections/apps/adminview/managefitness/managefitnessindex')));
-// const ProgramPanagerViewViewWorkOrders = Loadable(lazy(() => import('sections/apps/programmanagerview/workorder/viewworkordersindex')));
-// const ProgramPanagerViewViewRecruitingStatus = Loadable(lazy(() => import('sections/apps/programmanagerview/recruitingstatus/recruitingstatusindex')));
-// const ProgramPanagerViewViewOrgChart = Loadable(lazy(() => import('sections/apps/programmanagerview/org-chart')));
-// const ProgramPanagerViewViewFinancials = Loadable(lazy(() => import('sections/apps/programmanagerview/financials')));
-// const ProgramPanagerViewViewProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/progressreport')));
-// const ProgramPanagerViewViewWOProgressReport = Loadable(lazy(() => import('sections/apps/programmanagerview/woprogressreport')));
-// const ProgramPanagerViewViewRosters = Loadable(lazy(() => import('sections/apps/programmanagerview/roster/rosterindex')));
-// const ProgramPanagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastmprs')));
-// const ProgramPanagerViewFinancial = Loadable(lazy(() => import('sections/apps/programmanagerview/FinancialSummaryPage')));
-// const ProgramPanagerViewUtilization = Loadable(lazy(() => import('sections/apps/programmanagerview/utilization/utilizationsummaryindex')));
 const ProgramPanagerViewViewAllUsers = Loadable(lazy(() => import('sections/apps/adminview/manageusers/manageusersindex')));
 const ProgramPanagerLandingViewAllUsers = Loadable(lazy(() => import('sections/apps/adminview/adminlanding/adminlandingindex')));
-
-
-// const ProgramPanagerViewOrgProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/orgnization')));
-// const ProgramPanagerViewOrgTabProfile = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabProfile')));
-// const ProgramPanagerViewOrgTabProfile1 = Loadable(lazy(() => import('sections/apps/programmanagerview/org/TabPersonal')));
-
-
-// const DivisionManagerViewTabContract = Loadable(lazy(() => import('sections/apps/divisionmanagerview/TabContract')));
-// const BranchManagerViewTabContract = Loadable(lazy(() => import('sections/apps/branchmanagerview/TabContract')));
-// const BranchManagerViewPastMPRS = Loadable(lazy(() => import('sections/apps/programmanagerview/pastwomprs')));
 
 // render - widget
 const WidgetStatistics = Loadable(lazy(() => import('pages/widget/statistics')));
@@ -147,7 +125,7 @@ const MainRoutes = {
   path: '/',
   children: [
     {
-      path: '/',
+      path: '/FitnessChallenge',
       element: (
         <AuthGuard>
           <MainLayout />
@@ -189,11 +167,7 @@ const MainRoutes = {
               path: 'employeeview',
               element: <EmployeeView />
             }
-            // ,
-            // {
-            //   path: 'financialpersonnelview',
-            //   element: <FinancialPersonnelView/>
-            // }
+
             
           ]
         },
@@ -543,7 +517,7 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/maintenance',
+      path: '/FitnessChallenge/maintenance',
       element: <CommonLayout />,
       children: [
         {
@@ -565,7 +539,7 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/auth',
+      path: '/FitnessChallenge/auth',
       element: <CommonLayout />,
       children: [
         {
@@ -595,7 +569,7 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/',
+      path: 'FitnessChallenge/',
       element: <CommonLayout layout="simple" />,
       children: [
         {

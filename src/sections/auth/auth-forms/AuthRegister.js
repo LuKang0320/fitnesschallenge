@@ -95,7 +95,7 @@ const AuthRegister = () => {
               );
 
               setTimeout(() => {
-                navigate('/login', { replace: true });
+                navigate('/FitnessChallenge/login', { replace: true });
               }, 1500);
             }
           } catch (err) {

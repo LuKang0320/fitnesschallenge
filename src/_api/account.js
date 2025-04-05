@@ -30,7 +30,10 @@ services.onPost('/api/account/login').reply(async (request) => {
       body: new URLSearchParams(formData)
     });
     let loginres = await response.json();
-
+//console.log(loginres);
+    if(loginres.error !== undefined){
+      return [400, { message: loginres.error_description }];
+    }
 
     var userresponse = await fetch(process.env.REACT_APP_BASE_URL + '/api/account/GetUserByName?' + new URLSearchParams({
       username: loginres.userName

@@ -51,7 +51,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate(`/`, {
+      navigate(`/FitnessChallenge/Login`, {
         state: {
           from: ''
         }
