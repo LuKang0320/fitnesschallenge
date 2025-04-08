@@ -38,11 +38,13 @@ const EmployeeView = () => {
   const [isdisabled, setIsdisabled] = React.useState(true);
   const [fitnessdata, setFitnessdata] = useState([]);
   const [latestfitness, setLatestfitness] = useState({});
-
+  const [totalminutes, setTotalminutes] = useState(0);
 
 
   useEffect(() => {
     const init = async () => {
+      let workordersres = await GetAllFitnessActivities();
+      setFitnessactivities(workordersres.data);
       if(window.localStorage.getItem('latestFitness') !== undefined)
         { 
           const latestFitnessC = window.localStorage.getItem('latestFitness');
@@ -68,43 +70,41 @@ function newchartdata (items) {
 
       // Step 3: Build the final array
       const orderedArray = [];
-
+      var totolm = 0;
       for (let i = 1; i <= maxId; i++) {
         if (idMap[i]) {
+          totolm= totolm + idMap[i].totalminutes;
           orderedArray.push(idMap[i].totalminutes);
         } else {
           orderedArray.push(0);
         }
       }
+      setTotalminutes(totolm);
       return orderedArray;
 }
 
   const reloadUpdates = async () =>{
     
-      //console.log(latestfitness);
         const serviceToken = window.localStorage.getItem('serviceToken');
         const jwData = jwtDecode(serviceToken);
         const { userId } = jwData;
         setLoginuserid(userId);
-        let workordersres = await GetAllFitnessActivities();
-        setFitnessactivities(workordersres.data);
         let updatesres = await GetEmployeeDailyUpdatesByUserID(userId, selectedDate);
-        setUsermonthlyupdates(updatesres.data);    
-      
+        setUsermonthlyupdates(updatesres.data);      
         var newdata = newchartdata(updatesres.data);
         setFitnessdata(newdata);
 
         var wid = [];
         var workid = [];
-        for (var i = 0; i < workordersres.data.length; i++) 
+        for (var i = 0; i < fitnessactivities.length; i++) 
         {
           var result = updatesres.data.filter(obj => {
-            return obj.activityid === workordersres.data[i].id
+            return obj.activityid === fitnessactivities[i].id
           });
           if(result.length == 0)
           
-            wid.push(workordersres.data[i].name);
-            workid.push(workordersres.data[i].id);
+            wid.push(fitnessactivities[i].name);
+            workid.push(fitnessactivities[i].id);
         } 
         if(wid.length > 0)
         {
@@ -114,10 +114,10 @@ function newchartdata (items) {
         }
         else 
         {
-            if(workordersres.data.length > 0)
+            if(fitnessactivities.length > 0)
               {
-              setFitnessactivity(workordersres.data[0].id);
-              fitnessselectchange(workordersres.data[0].id,updatesres.data);
+              setFitnessactivity(fitnessactivities[0].id);
+              fitnessselectchange(fitnessactivities[0].id,updatesres.data);
             }
         }        
       };
@@ -199,7 +199,7 @@ function newchartdata (items) {
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack spacing={0.5}>
                   <Typography variant="h6" >
-                    Statistics: 180 minutes
+                    Daily Fitness Activities Total: {totalminutes} minutes
                   </Typography>
                 </Stack>
               </Box>

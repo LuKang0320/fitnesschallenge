@@ -24,9 +24,9 @@ const AuthWrapper = ({ children }) => (
         minHeight: '100vh'
       }}
     >
-      <Grid item xs={12} sx={{ ml: 3, mt: 3 }}>
-        {/* <Logo /> */}
-      </Grid>
+      {/*<Grid item xs={12} sx={{ ml: 3, mt: 3 }}>
+         <Logo /> 
+      </Grid>*/}
       <Grid item xs={12}>
         <Grid
           item
@@ -36,7 +36,7 @@ const AuthWrapper = ({ children }) => (
           alignItems="center"
           sx={{ minHeight: { xs: 'calc(100vh - 210px)', sm: 'calc(100vh - 134px)', md: 'calc(100vh - 112px)' } }}
         >
-          <Grid item sx={{ mt: 18 }}>
+          <Grid item sx={{ mt: 0 }}>
             <AuthCard >{children}</AuthCard>
           </Grid>
         </Grid>

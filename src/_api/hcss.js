@@ -1324,15 +1324,11 @@ services.onPost('/api/hcss/UpdateBranchManager').reply(async (request) => {
 
 ///   fitness challenge services
 
-services.onPost('/api/fitness/GetAllFitnessActivities').reply(async (request) => {
+services.onPost('/api/fitness/GetAllFitnessActivities').reply(async () => {
   try {
     await delay(500);
 
-    const { userid } = JSON.parse(request.data);
-
-    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetAllFitnessActivities?' + new URLSearchParams({
-        userid: userid
-    }), {
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetAllFitnessActivities?', {
       method:'get'
     });
     let loginres = await response.json();

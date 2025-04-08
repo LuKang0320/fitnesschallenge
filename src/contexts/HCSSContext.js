@@ -461,10 +461,10 @@ const GetAllUsers = async (fitid) => {
   //console.log(resdata);
   return resdata;
 };
-const GetAllFitnessActivities = async (userid) => {
+const GetAllFitnessActivities = async () => {
 
   const response = await axios.post('/api/fitness/GetAllFitnessActivities', {
-    userid
+    
   });
   let resdata = response.data;
 
