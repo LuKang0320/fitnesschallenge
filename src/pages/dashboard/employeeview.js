@@ -25,7 +25,9 @@ import dayjs from "dayjs";
 // ============================|| JWT - LOGIN ||============================ //
 
 const EmployeeView = () => {
+  const [latestfitness, setLatestfitness] = useState({});
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+
   const [loginuserid, setLoginuserid] = useState('');
   const dispatch = useDispatch();
   const {AddNewFitnessActivityRecord,GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID } = useHCSS();
@@ -35,9 +37,8 @@ const EmployeeView = () => {
   const [usermonthlyupdates, setUsermonthlyupdates] = React.useState([]);
   const [usermonthlyupdate, setUsermonthlyupdate] = React.useState({});
 
-  const [isdisabled, setIsdisabled] = React.useState(true);
   const [fitnessdata, setFitnessdata] = useState([]);
-  const [latestfitness, setLatestfitness] = useState({});
+  
   const [totalminutes, setTotalminutes] = useState(0);
 
 
@@ -45,13 +46,14 @@ const EmployeeView = () => {
     const init = async () => {
       let workordersres = await GetAllFitnessActivities();
       setFitnessactivities(workordersres.data);
-      if(window.localStorage.getItem('latestFitness') !== undefined)
-        { 
+      //if(window.localStorage.getItem('latestFitness') !== undefined)
+        //{ 
           const latestFitnessC = window.localStorage.getItem('latestFitness');
            var lFitness = JSON.parse(latestFitnessC);
            setLatestfitness(lFitness);
-        }
-       await reloadUpdates();
+           setSelectedDate(dayjs(lFitness.startdate).format("YYYY-MM-DD"));
+        //}
+       await reloadUpdates(dayjs(lFitness.startdate).format("YYYY-MM-DD"));
     };
 
     init();
@@ -83,13 +85,13 @@ function newchartdata (items) {
       return orderedArray;
 }
 
-  const reloadUpdates = async () =>{
+  const reloadUpdates = async (sdate) =>{
     
         const serviceToken = window.localStorage.getItem('serviceToken');
         const jwData = jwtDecode(serviceToken);
         const { userId } = jwData;
         setLoginuserid(userId);
-        let updatesres = await GetEmployeeDailyUpdatesByUserID(userId, selectedDate);
+        let updatesres = await GetEmployeeDailyUpdatesByUserID(userId, sdate);
         setUsermonthlyupdates(updatesres.data);      
         var newdata = newchartdata(updatesres.data);
         setFitnessdata(newdata);
@@ -108,9 +110,8 @@ function newchartdata (items) {
         } 
         if(wid.length > 0)
         {
-          //setWorkorderwarning("Work Order " + wid.toString() + " still need to be updated");
-          setFitnessactivity(workid[0]);
-          fitnessselectchange(workid[0],updatesres.data);
+          //setFitnessactivity(workid[0]);
+          fitnessselectchange(fitnessactivity,updatesres.data);
         }
         else 
         {
@@ -151,7 +152,6 @@ function newchartdata (items) {
     }
     else{
       setUsermonthlyupdate({});
-      setIsdisabled(false);
     }
   }
 
@@ -220,7 +220,8 @@ function newchartdata (items) {
             totalminutes: Yup.string().max(12400).required('Minutes Performed is required')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting ,resetForm }) => {
-            try {   //fitnesschallengeid,activity,totalminutes,activityid,datestring
+            try {  
+              if(fitnessactivity !== ''){
               var fitem= fitnessactivities.find(item => item.id === fitnessactivity);
             var res= await AddNewFitnessActivityRecord(latestfitness.id, fitem.name,values.totalminutes,
                fitnessactivity,selectedDate);
@@ -240,26 +241,28 @@ function newchartdata (items) {
                     close: true
                   })
                 );
-                reloadUpdates();
+                reloadUpdates(selectedDate);
                  resetForm();
                 setStatus({ success: true });
                 setSubmitting(false);
-                setIsdisabled(true);
+                //setIsdisabled(true);
               }
               else {
                 setStatus({ success: false });
                 setErrors({ submit: err.message });
                 setSubmitting(false);
-                setIsdisabled(false);
+                //setIsdisabled(false);
 
               }
+            }else{
+                setStatus({ success: false });
+                setErrors({ submit: 'Pleae select Fitnes Activity!' });
+                setSubmitting(false);
+            }
             } catch (err) {
-            // console.error(err);
                 setStatus({ success: false });
                 setErrors({ submit: err.message });
-                setSubmitting(false);
-                setIsdisabled(false);
-              
+                setSubmitting(false);             
             }
           
           }}
@@ -322,7 +325,7 @@ function newchartdata (items) {
                 )}
                 <Grid item xs={12}>
                   <AnimateButton>
-                    <Button disableElevation disabled={isSubmitting || isdisabled} fullWidth size="large" type="submit" variant="contained" color="primary">
+                    <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
                       submit
                     </Button>
                   </AnimateButton>
