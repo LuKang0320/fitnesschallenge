@@ -17,47 +17,47 @@ var dashboard = {
   type: 'group',
   icon: 'dashboardOutlined',
   children: [
-    {
-      id: 'dashboard',
-      title: 'dashboard',
-      type: 'collapse',
-      icon: 'dashboardOutlined',
-      children: [
-        {
-          id: 'default',
-          title: 'default',
-          type: 'item',
-          url: '/dashboard/default',
-          breadcrumbs: false
-        },
-        {
-          id: 'analytics',
-          title: 'analytics',
-          type: 'item',
-          url: '/dashboard/analytics',
-          breadcrumbs: false
-        }
-      ]
-    },
-    {
-      id: 'components',
-      title: 'components',
-      type: 'item',
-      url: '/components-overview/buttons',
-      icon: 'goldOutlined',
-      target: true,
-      chip: {
-        label: 'new',
-        color: 'primary',
-        size: 'small',
-        variant: 'combined'
-      }
-    },
+    // {
+    //   id: 'dashboard',
+    //   title: 'dashboard',
+    //   type: 'collapse',
+    //   icon: 'dashboardOutlined',
+    //   children: [
+    //     {
+    //       id: 'default',
+    //       title: 'default',
+    //       type: 'item',
+    //       url: '/dashboard/default',
+    //       breadcrumbs: false
+    //     },
+    //     {
+    //       id: 'analytics',
+    //       title: 'analytics',
+    //       type: 'item',
+    //       url: '/dashboard/analytics',
+    //       breadcrumbs: false
+    //     }
+    //   ]
+    // },
+    // {
+    //   id: 'components',
+    //   title: 'components',
+    //   type: 'item',
+    //   url: '/components-overview/buttons',
+    //   icon: 'goldOutlined',
+    //   target: true,
+    //   chip: {
+    //     label: 'new',
+    //     color: 'primary',
+    //     size: 'small',
+    //     variant: 'combined'
+    //   }
+    // },
     {
       id: 'dailyactivity',
       title: 'dailyactivity',
       icon: 'dashboardOutlined',
-      url: '/dashboard/employeeview',
+      url: '/FitnessChallenge/dashboard/employeeview',
       breadcrumbs: false,
       type: 'item'
     }
@@ -79,7 +79,7 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                   id: 'dailyactivity',
                   title: 'dailyactivity',
                   icon: 'dashboardOutlined',
-                  url: '/dashboard/employeeview',
+                  url: '/FitnessChallenge/dashboard/employeeview',
                   breadcrumbs: false,
                   type: 'item'
                 }
@@ -99,7 +99,7 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 id: 'dailyactivity',
                 title: 'dailyactivity',
                 icon: 'dashboardOutlined',
-                url: '/dashboard/employeeview',
+                url: '/FitnessChallenge/dashboard/employeeview',
                 breadcrumbs: false,
                 type: 'item'
               },
@@ -107,7 +107,7 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 id: 'adminview',
                 title: 'adminview',
                 type: 'collapse',
-                url: '/dashboard/adminview/adminlanding',
+                url: '/FitnessChallenge/dashboard/adminview/adminlanding',
                 icon: 'dashboardOutlined',
                 breadcrumbs: false,
                 children: [    
@@ -115,14 +115,14 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                     id: 'managefitness',
                     title:'managefitness',
                     type: 'item',
-                    url: '/dashboard/adminview/managefitness',
+                    url: '/FitnessChallenge/dashboard/adminview/managefitness',
                     breadcrumbs: true
                   }  ,         
                   {
                     id: 'manageusers',
                     title:'manageusers',
                     type: 'item',
-                    url: '/dashboard/adminview/manageusers',
+                    url: '/FitnessChallenge/dashboard/adminview/manageusers',
                     breadcrumbs: true
                   }                  
                 ]
@@ -140,35 +140,35 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
             icon: 'dashboardOutlined',
             children: [
               {
-                id: 'dashboard',
-                title: 'employeeview',
-                //type: 'collapse',
+                id: 'dailyactivity',
+                title: 'dailyactivity',
                 icon: 'dashboardOutlined',
-                url: '/dashboard/employeeview',
+                url: '/FitnessChallenge/dashboard/employeeview',
                 breadcrumbs: false,
-                type: 'item',
-                children: [
-                  // {
-                  //   id: 'default',
-                  //   title: 'default',
-                  //   type: 'item',
-                  //   url: '/dashboard/default',
-                  //   breadcrumbs: false
-                  // },
-                  // {
-                  //   id: 'analytics',
-                  //   title: 'analytics',
-                  //   type: 'item',
-                  //   url: '/dashboard/analytics',
-                  //   breadcrumbs: false
-                  // },
+                type: 'item'
+              },
+              {
+                id: 'adminview',
+                title: 'adminview',
+                type: 'collapse',
+                url: '/FitnessChallenge/dashboard/adminview/adminlanding',
+                icon: 'dashboardOutlined',
+                breadcrumbs: false,
+                children: [    
                   {
-                    id: 'employeeview',
-                    title: 'employeeview',
+                    id: 'managefitness',
+                    title:'managefitness',
                     type: 'item',
-                    url: '/dashboard/employeeview',
-                    breadcrumbs: false
-                  }
+                    url: '/FitnessChallenge/dashboard/adminview/managefitness',
+                    breadcrumbs: true
+                  }  ,         
+                  {
+                    id: 'manageusers',
+                    title:'manageusers',
+                    type: 'item',
+                    url: '/FitnessChallenge/dashboard/adminview/manageusers',
+                    breadcrumbs: true
+                  }                  
                 ]
               }
             ]

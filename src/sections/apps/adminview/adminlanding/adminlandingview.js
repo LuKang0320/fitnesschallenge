@@ -227,14 +227,18 @@ SelectionHeader.propTypes = {
 };
 
 const Adminlandingview = () => {
-  const { GetAllUsers } = useHCSS();
-
+  const { GetAllUsersRanking } = useHCSS();
+  const [latestfitness, setLatestfitness] = useState({});
   const [list, setList] = React.useState([]);
 
    const [fitnessdata, setFitnessdata] = useState([]);
   useEffect(() => {
     const init = async () => {   
-      let listsres = await GetAllUsers(1);
+      const latestFitnessC = window.localStorage.getItem('latestFitness');
+      var lFitness = JSON.parse(latestFitnessC);
+      setLatestfitness(lFitness);
+      console.log(latestfitness);
+      let listsres = await GetAllUsersRanking(lFitness.id);
       setList(listsres.data);
       setFitnessdata([10,20,30,40,50,60,70,80,40,50,60,70,80]);
     };
@@ -260,7 +264,7 @@ const Adminlandingview = () => {
       },
       {
         Header: 'Total Minutes',
-        //accessor: 'roleid'
+        accessor: 'total'
       }
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -461,6 +461,16 @@ const GetAllUsers = async (fitid) => {
   //console.log(resdata);
   return resdata;
 };
+const GetAllUsersRanking = async (fitid) => {
+
+  const response = await axios.post('/api/fitness/GetAllUsersRanking', {
+    fitid
+  });
+  let resdata = response.data;
+
+  //console.log(resdata);
+  return resdata;
+};
 const GetAllFitnessActivities = async () => {
 
   const response = await axios.post('/api/fitness/GetAllFitnessActivities', {
@@ -518,7 +528,8 @@ const AddNewFitnessActivityRecord = async (fitnesschallengeid,activity,totalminu
 
 
 
-  GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID,GetAllFitness,AddNewFitnessActivityRecord}}>{children}</HCSSContext.Provider>;
+  GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID,GetAllFitness,AddNewFitnessActivityRecord,
+  GetAllUsersRanking}}>{children}</HCSSContext.Provider>;
 };
 
 HCSSProvider.propTypes = {
