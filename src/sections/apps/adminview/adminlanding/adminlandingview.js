@@ -227,20 +227,30 @@ SelectionHeader.propTypes = {
 };
 
 const Adminlandingview = () => {
-  const { GetAllUsersRanking } = useHCSS();
-  const [latestfitness, setLatestfitness] = useState({});
+  const { GetAllUsersRanking,GetFitnessStatistic } = useHCSS();
+  //const [latestfitness, setLatestfitness] = useState({});
   const [list, setList] = React.useState([]);
+  const [summinutes, setSumminutes] = React.useState(0);
 
    const [fitnessdata, setFitnessdata] = useState([]);
   useEffect(() => {
     const init = async () => {   
       const latestFitnessC = window.localStorage.getItem('latestFitness');
       var lFitness = JSON.parse(latestFitnessC);
-      setLatestfitness(lFitness);
-      console.log(latestfitness);
+      //setLatestfitness(lFitness);
+      //console.log(latestfitness);
       let listsres = await GetAllUsersRanking(lFitness.id);
       setList(listsres.data);
-      setFitnessdata([10,20,30,40,50,60,70,80,40,50,60,70,80]);
+
+      let listStatisticres =await GetFitnessStatistic(lFitness.id);
+      const sortedNames = [...listStatisticres.data]
+      .sort((a, b) => a.id - b.id)
+      .map(item => item.totalminutes);
+
+      const totalminu = sortedNames.reduce((sum, num) => sum + num, 0);
+      //console.log(totalminu);
+      setSumminutes(totalminu);
+      setFitnessdata(sortedNames);
     };
 
     init();
@@ -286,7 +296,7 @@ const Adminlandingview = () => {
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack spacing={0.5}>
                   <Typography variant="h6" >
-                    Statistics: 180 minutes
+                    Statistics total: {summinutes} minutes
                   </Typography>
                 </Stack>
               </Box>

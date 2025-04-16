@@ -107,10 +107,17 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 id: 'adminview',
                 title: 'adminview',
                 type: 'collapse',
-                url: '/FitnessChallenge/dashboard/adminview/adminlanding',
+                //url: '/FitnessChallenge/dashboard/adminview/adminlanding',
                 icon: 'dashboardOutlined',
                 breadcrumbs: false,
                 children: [    
+                  {
+                    id: 'rankingstatistics',
+                    title:'rankingstatistics',
+                    type: 'item',
+                    url: '/FitnessChallenge/dashboard/adminview/adminlanding',
+                    breadcrumbs: true
+                  }  ,  
                   {
                     id: 'managefitness',
                     title:'managefitness',
@@ -151,10 +158,17 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 id: 'adminview',
                 title: 'adminview',
                 type: 'collapse',
-                url: '/FitnessChallenge/dashboard/adminview/adminlanding',
+                //url: '/FitnessChallenge/dashboard/adminview/adminlanding',
                 icon: 'dashboardOutlined',
                 breadcrumbs: false,
-                children: [    
+                children: [   
+                  {
+                    id: 'rankingstatistics',
+                    title:'rankingstatistics',
+                    type: 'item',
+                    url: '/FitnessChallenge/dashboard/adminview/adminlanding',
+                    breadcrumbs: true
+                  }  ,   
                   {
                     id: 'managefitness',
                     title:'managefitness',

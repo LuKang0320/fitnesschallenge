@@ -106,12 +106,12 @@ export const JWTProvider = ({ children }) => {
     const response = await axios.post('/api/account/login', { email, password });
     const { serviceToken,accessToken,latestFitness, user } = response.data;
 
-    if(user.role.includes('Project Staff Member')){
-      onChangeAppDefaultPath('/dashboard/employeeview');
+    if(user.role.includes('Employee')){
+      onChangeAppDefaultPath('/FitnessChallenge/dashboard/employeeview');
       //console.log(APP_DEFAULT_PATH);
     }
-    if(user.role.includes('Program Manager')){
-      onChangeAppDefaultPath('/dashboard/programmanagerview/contract');
+    if(user.role.includes('SuperAdmin')){
+      onChangeAppDefaultPath('/FitnessChallenge/dashboard/adminview/adminlanding');
       //console.log(APP_DEFAULT_PATH);
     }
 
