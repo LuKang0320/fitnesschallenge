@@ -233,24 +233,31 @@ const Adminlandingview = () => {
   const [summinutes, setSumminutes] = React.useState(0);
 
    const [fitnessdata, setFitnessdata] = useState([]);
+   const [fitnessdatacate, setFitnessdatacate] = useState([]);
   useEffect(() => {
     const init = async () => {   
       const latestFitnessC = window.localStorage.getItem('latestFitness');
       var lFitness = JSON.parse(latestFitnessC);
       //setLatestfitness(lFitness);
-      //console.log(latestfitness);
+      //
       let listsres = await GetAllUsersRanking(lFitness.id);
       setList(listsres.data);
 
       let listStatisticres =await GetFitnessStatistic(lFitness.id);
+      //console.log(listStatisticres.data);
       const sortedNames = [...listStatisticres.data]
-      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => b.totalminutes - a.totalminutes)
       .map(item => item.totalminutes);
 
+      const sortedCate = [...listStatisticres.data]
+      .sort((a, b) => b.totalminutes - a.totalminutes)
+      .map(item => item.activity);
+      //console.log(sortedCate);
       const totalminu = sortedNames.reduce((sum, num) => sum + num, 0);
-      //console.log(totalminu);
+      
       setSumminutes(totalminu);
       setFitnessdata(sortedNames);
+      setFitnessdatacate(sortedCate);
     };
 
     init();
@@ -284,14 +291,14 @@ const Adminlandingview = () => {
 
   return (
     <Grid container spacing={1}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <MainCard content={false}>
             <ScrollX>
               <FReactTable columns={columns} data={list} />
             </ScrollX>
           </MainCard>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <MainCard sx={{ mt: 0, mb:1 }} content={false}>
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack spacing={0.5}>
@@ -300,7 +307,7 @@ const Adminlandingview = () => {
                   </Typography>
                 </Stack>
               </Box>
-              <DailyBarChart rdata={fitnessdata}/>
+              <DailyBarChart rdata={fitnessdata} rcategories={fitnessdatacate}/>
             </MainCard>
           </Grid>
       </Grid>

@@ -168,21 +168,22 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                     type: 'item',
                     url: '/FitnessChallenge/dashboard/adminview/adminlanding',
                     breadcrumbs: true
-                  }  ,   
-                  {
-                    id: 'managefitness',
-                    title:'managefitness',
-                    type: 'item',
-                    url: '/FitnessChallenge/dashboard/adminview/managefitness',
-                    breadcrumbs: true
-                  }  ,         
-                  {
-                    id: 'manageusers',
-                    title:'manageusers',
-                    type: 'item',
-                    url: '/FitnessChallenge/dashboard/adminview/manageusers',
-                    breadcrumbs: true
-                  }                  
+                  }  
+                  // ,   
+                  // {
+                  //   id: 'managefitness',
+                  //   title:'managefitness',
+                  //   type: 'item',
+                  //   url: '/FitnessChallenge/dashboard/adminview/managefitness',
+                  //   breadcrumbs: true
+                  // }  ,         
+                  // {
+                  //   id: 'manageusers',
+                  //   title:'manageusers',
+                  //   type: 'item',
+                  //   url: '/FitnessChallenge/dashboard/adminview/manageusers',
+                  //   breadcrumbs: true
+                  // }                  
                 ]
               }
             ]

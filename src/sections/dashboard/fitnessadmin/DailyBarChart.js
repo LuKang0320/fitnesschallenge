@@ -16,7 +16,7 @@ const barChartOptions = {
     type: 'bar',
     height: 250,
     toolbar: {
-      show: false
+      show: true
     }
   },
   plotOptions: {
@@ -33,7 +33,7 @@ const barChartOptions = {
       'Other Intense', 'Other Moderate', 'Sports', 'Elliptical', 'Aerobic'
     ],
     axisBorder: {
-      show: false
+      show: true
     },
     axisTicks: {
       show: false
@@ -43,13 +43,13 @@ const barChartOptions = {
     show: false
   },
   grid: {
-    show: false
+    show: true
   }
 };
 
 // ==============================|| MONTHLY BAR CHART ||============================== //
 
-const DailyBarChart = ({rdata}) => {
+const DailyBarChart = ({rdata, rcategories}) => {
 
   const theme = useTheme();
   const { mode } = useConfig();
@@ -84,6 +84,7 @@ else{
       ...prevState,
       colors: [info],
       xaxis: {
+        categories: rcategories,
         labels: {
           style: {
             colors: [secondary, secondary, secondary, secondary, secondary, secondary, secondary]
@@ -94,7 +95,7 @@ else{
         theme: mode === 'dark' ? 'dark' : 'light'
       }
     }));
-  }, [mode, primary, info, secondary]);
+  }, [mode, primary, info, secondary,rcategories]);
 
   return (
     <div id="chart">
