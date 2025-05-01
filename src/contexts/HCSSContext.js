@@ -511,7 +511,16 @@ const AddNewFitnessActivityRecord = async (fitnesschallengeid,activity,totalminu
   
 };
 
+const GetEmployeeProgress = async (userid, fid) => {
 
+  const response = await axios.post('/api/fitness/GetEmployeeProgress', {
+    userid, fid
+  });
+  let resdata = response.data;
+
+  //console.log(resdata);
+  return resdata;
+};
 
   if (state.isInitialized !== undefined && !state.isInitialized) {
     return <Loader />;
@@ -540,7 +549,7 @@ const AddNewFitnessActivityRecord = async (fitnesschallengeid,activity,totalminu
 
 
   GetAllFitnessActivities,GetEmployeeDailyUpdatesByUserID,GetAllFitness,AddNewFitnessActivityRecord,
-  GetAllUsersRanking,GetFitnessStatistic}}>{children}</HCSSContext.Provider>;
+  GetAllUsersRanking,GetFitnessStatistic,GetEmployeeProgress}}>{children}</HCSSContext.Provider>;
 };
 
 HCSSProvider.propTypes = {

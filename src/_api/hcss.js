@@ -1567,3 +1567,38 @@ services.onPost('/api/fitness/AddNewFitnessActivityRecord').reply(async (request
     return [500, { message: 'Server Error' }];
   }
 });
+
+services.onPost('/api/fitness/GetEmployeeProgress').reply(async (request) => {
+  try {
+    await delay(500);
+
+    const { userid, fid} = JSON.parse(request.data);
+
+    var response = await fetch(process.env.REACT_APP_BASE_URL + '/api/fitness/GetEmployeeProgress?' + new URLSearchParams({
+        userid: userid,
+        fid: fid
+    }), {
+      method:'get'
+    });
+    let loginres = await response.json();
+
+    //console.log(loginres);
+    var res = [];
+    loginres.map(r=> {
+      res.push(r)
+    })
+    if(response.ok){
+      return [
+        200,
+        {data: res}
+      ];
+    }
+    else {
+      return [400, { message: loginres.error_description }];
+    }
+
+  } catch (err) {
+    console.error(err);
+    return [500, { message: 'Server Error' }];
+  }
+});

@@ -10,7 +10,7 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 const DashboardAnalytics = Loadable(lazy(() => import('pages/dashboard/analytics')));
 const EmployeeView = Loadable(lazy(() => import('pages/dashboard/employeeview')));
-
+const EmployeeProgressView = Loadable(lazy(() => import('pages/dashboard/employeeprogressview')));
 
 const ProgramPanagerViewFitness = Loadable(lazy(() => import('sections/apps/adminview/managefitness/managefitnessindex')));
 const ProgramPanagerViewViewAllUsers = Loadable(lazy(() => import('sections/apps/adminview/manageusers/manageusersindex')));
@@ -166,6 +166,10 @@ const MainRoutes = {
             {
               path: 'employeeview',
               element: <EmployeeView />
+            },
+            {
+              path: 'employeeprogressview',
+              element: <EmployeeProgressView />
             }
 
             

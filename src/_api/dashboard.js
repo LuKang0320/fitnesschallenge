@@ -60,6 +60,14 @@ var dashboard = {
       url: '/FitnessChallenge/dashboard/employeeview',
       breadcrumbs: false,
       type: 'item'
+    },
+    {
+      id: 'challengeprogess',
+      title: 'challengeprogess',
+      icon: 'dashboardOutlined',
+      url: '/FitnessChallenge/dashboard/employeeprogressview',
+      breadcrumbs: false,
+      type: 'item'
     }
   ]
 };
@@ -82,6 +90,14 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                   url: '/FitnessChallenge/dashboard/employeeview',
                   breadcrumbs: false,
                   type: 'item'
+                },
+                {
+                  id: 'challengeprogess',
+                  title: 'challengeprogess',
+                  icon: 'dashboardOutlined',
+                  url: '/FitnessChallenge/dashboard/employeeprogressview',
+                  breadcrumbs: false,
+                  type: 'item'
                 }
               ]
           };
@@ -100,6 +116,14 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 title: 'dailyactivity',
                 icon: 'dashboardOutlined',
                 url: '/FitnessChallenge/dashboard/employeeview',
+                breadcrumbs: false,
+                type: 'item'
+              },
+              {
+                id: 'challengeprogess',
+                title: 'challengeprogess',
+                icon: 'dashboardOutlined',
+                url: '/FitnessChallenge/dashboard/employeeprogressview',
                 breadcrumbs: false,
                 type: 'item'
               },
@@ -151,6 +175,14 @@ if(window.localStorage.getItem('users') !== undefined && window.localStorage.get
                 title: 'dailyactivity',
                 icon: 'dashboardOutlined',
                 url: '/FitnessChallenge/dashboard/employeeview',
+                breadcrumbs: false,
+                type: 'item'
+              },
+              {
+                id: 'challengeprogess',
+                title: 'challengeprogess',
+                icon: 'dashboardOutlined',
+                url: '/FitnessChallenge/dashboard/employeeprogressview',
                 breadcrumbs: false,
                 type: 'item'
               },
