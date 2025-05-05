@@ -11,7 +11,7 @@ import ProgressChart from 'sections/dashboard/fitnessemployee/ProgressChart';
 // ============================|| JWT - LOGIN ||============================ //
 
 const EmployeeProgressView = () => {
-  const [latestfitness, setLatestfitness] = useState({});
+  //const [latestfitness, setLatestfitness] = useState({});
 
  const [fitnessdata, setFitnessdata] = useState([]);
    const [fitnessdatacate, setFitnessdatacate] = useState([]);
@@ -26,8 +26,8 @@ const EmployeeProgressView = () => {
 
           const latestFitnessC = window.localStorage.getItem('latestFitness');
            var lFitness = JSON.parse(latestFitnessC);
-           setLatestfitness(lFitness);
-           console.log(latestfitness);
+           //setLatestfitness(lFitness);
+           //console.log(latestfitness);
        await reloadUpdates(lFitness.id);
     };
 
@@ -67,7 +67,7 @@ const EmployeeProgressView = () => {
         const { userId } = jwData;
         //setLoginuserid(userId);
         let updatesres = await GetEmployeeProgress(userId, fid);
-        console.log(updatesres.data);
+        //console.log(updatesres.data);
 
 
         const sortedNames = [...updatesres.data]

@@ -35,7 +35,46 @@ const ProgressChart = ({rdata, rcategories}) => {
       }
     },
     dataLabels: {
-      enabled: true
+      enabled: true,
+      enabledOnSeries: undefined,
+      formatter: function (val) {
+          return val
+      },
+      textAnchor: 'middle',
+      distributed: false,
+      offsetX: 0,
+      offsetY: -5,
+      style: {
+          fontSize: '14px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 'bold',
+          colors: undefined
+      },
+      background: {
+        enabled: false,
+        foreColor: '#fff',
+        padding: 4,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#fff',
+        opacity: 0.9,
+        dropShadow: {
+          enabled: false,
+          top: 1,
+          left: 1,
+          blur: 1,
+          color: '#000',
+          opacity: 0.45
+        }
+      },
+      dropShadow: {
+          enabled: false,
+          top: 1,
+          left: 1,
+          blur: 1,
+          color: '#000',
+          opacity: 0.45
+      }
     },
     stroke: {
       curve: 'straight',

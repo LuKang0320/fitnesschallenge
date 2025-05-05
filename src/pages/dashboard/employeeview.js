@@ -51,7 +51,7 @@ const EmployeeView = () => {
           const latestFitnessC = window.localStorage.getItem('latestFitness');
            var lFitness = JSON.parse(latestFitnessC);
            setLatestfitness(lFitness);
-           setSelectedDate(dayjs(lFitness.startdate).format("YYYY-MM-DD"));
+           //setSelectedDate(dayjs(lFitness.startdate).format("YYYY-MM-DD"));
         //}
        await reloadUpdates(dayjs(lFitness.startdate).format("YYYY-MM-DD"));
     };
