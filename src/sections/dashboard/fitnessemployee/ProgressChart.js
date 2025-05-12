@@ -21,7 +21,8 @@ const ProgressChart = ({rdata, rcategories}) => {
       //height: 355,
       type: 'area',
       toolbar: {
-        show: true
+        show: true,
+        autoSelected: 'pan'
       }
     },
     fill: {
