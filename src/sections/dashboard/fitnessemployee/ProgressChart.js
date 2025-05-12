@@ -8,7 +8,7 @@ import useConfig from 'hooks/useConfig';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
-
+import dayjs from "dayjs";
 // ==============================|| ORDERS CARD CHART ||============================== //
 
 const ProgressChart = ({rdata, rcategories}) => {
@@ -30,8 +30,8 @@ const ProgressChart = ({rdata, rcategories}) => {
         shadeIntensity: 1,
         type: 'vertical',
         inverseColors: false,
-        opacityFrom: 0.5,
-        opacityTo: 0
+        opacityFrom: 0.7,
+        opacityTo: 0.9
       }
     },
     dataLabels: {
@@ -77,8 +77,8 @@ const ProgressChart = ({rdata, rcategories}) => {
       }
     },
     stroke: {
-      curve: 'straight',
-      width: 1
+      curve: 'smooth',
+      width: 2
     },
     grid: {
       show: true,
@@ -109,6 +109,9 @@ const ProgressChart = ({rdata, rcategories}) => {
       xaxis: {
         categories: rcategories,
         labels: {
+          formatter: function(val) {
+            return dayjs(val).format('MMM D');
+          },
           style: {
             colors: [
               secondary,

@@ -9,13 +9,13 @@ import MainCard from 'components/MainCard';
 import useHCSS from 'hooks/useHCSS';
 import ProgressChart from 'sections/dashboard/fitnessemployee/ProgressChart';
 // ============================|| JWT - LOGIN ||============================ //
-
+import dayjs from "dayjs";
 const EmployeeProgressView = () => {
   //const [latestfitness, setLatestfitness] = useState({});
 
  const [fitnessdata, setFitnessdata] = useState([]);
    const [fitnessdatacate, setFitnessdatacate] = useState([]);
-
+   const [latestfitness, setLatestfitness] = useState({});
   const {GetEmployeeProgress } = useHCSS();
 
   const [totalminutes, setTotalminutes] = useState(0);
@@ -26,8 +26,8 @@ const EmployeeProgressView = () => {
 
           const latestFitnessC = window.localStorage.getItem('latestFitness');
            var lFitness = JSON.parse(latestFitnessC);
-           //setLatestfitness(lFitness);
-           //console.log(latestfitness);
+           setLatestfitness(lFitness);
+           console.log(lFitness);
        await reloadUpdates(lFitness.id);
     };
 
@@ -94,12 +94,15 @@ const EmployeeProgressView = () => {
             <MainCard sx={{ mt: 0, mb:1 }} content={false}>
               <Box sx={{ p: 2, pb: 0 }}>
                 <Stack spacing={0.5}>
+                  <Typography variant="h5" >
+                  {latestfitness.name}: From {dayjs(latestfitness.startdate).format('MMMM DD, YYYY')} To {dayjs(latestfitness.enddate).format('MMMM DD, YYYY')}
+                  </Typography>
                   <Typography variant="h6" >
-                    Fitness Challenge Progress: Total {totalminutes} minutes
+                  Fitness Challenge Progress: Total {totalminutes} minutes
                   </Typography>
                 </Stack>
               </Box>
-              <ProgressChart rdata={fitnessdata} rcategories={fitnessdatacate}/>
+              <ProgressChart rdata={fitnessdata} rcategories={fitnessdatacate} />
             </MainCard>
           </Grid>
     </Grid>
